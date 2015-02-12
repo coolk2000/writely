@@ -1,14 +1,16 @@
 a:link {
-  color: #919191
+  color: #777
 }
 a:visited {
-  color: #919191
+  color: #777
 }
 a:hover {
-  color: #888
+  color: #666
+  font-weight: 500;
 }
 a:active {
-  color: #808080
+  color: #555
+  font-style: oblique;
 }
 /*html, body {
   height: 100%;

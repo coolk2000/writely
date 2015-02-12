@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>writely; home</title>
+		<title>writely; login</title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,7 @@
 		<div class="container">
 			<div class="centered text-center">
 				<div class="jumbotron">
+					<h1>login</h1>
 					<form class="form-inline">
 						<div class="form-group">
 							<label class="sr-only" for="inputUsername">Username</label>
@@ -39,7 +40,7 @@
 			<div class="container">
 				<div class="text-muted">
 					<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
-					2015 Jake Koenen
+					2015 Jake Koenen | <a href="index">home</a>
 				</div>
 			</div>
 		</footer>
