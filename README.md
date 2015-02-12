@@ -11,9 +11,6 @@
   - [ ] Creation
   - [ ] Deletion
   - [ ] Page IDs
+  - [ ] Editing
   - [ ] Commenting?
   - [ ] Privacy Settings
-- [ ] Login
-  - [ ] HTTPS
-  - [x] Login page
-  - [ ] Registration page
