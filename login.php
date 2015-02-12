@@ -40,7 +40,7 @@
 			<div class="container">
 				<div class="text-muted">
 					<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
-					2015 Jake Koenen | <a href="index">home</a>
+					2015 Jake Koenen | <a href="index">home</a> | <script type="text/javascript" src="modules/footquote/random.php?type=1"></script>
 				</div>
 			</div>
 		</footer>
