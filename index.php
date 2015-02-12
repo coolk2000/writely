@@ -8,8 +8,33 @@
 		<link rel="stylesheet" type="text/css" href="modules/bootstrap/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="style.css">
 		<link href="footer.css" rel="stylesheet">
+		<link href="login.css" rel="stylesheet">
 	</head>
 	<body>
+		<div class="container">
+			<div class="centered text-center">
+				<div class="jumbotron">
+					<form class="form-inline">
+						<div class="form-group">
+							<label class="sr-only" for="inputUsername">Username</label>
+							<input type="username" class="form-control" id="inputUsername" placeholder="Username">
+						</div>
+						<div class="form-group">
+							<label class="sr-only" for="inputPassword">Password</label>
+							<input type="password" class="form-control" id="inputPassword" placeholder="Password">
+						</div>
+						<!-- <div class="checkbox">
+							<label>
+								<input type="checkbox"> Remember me
+							</label>
+						</div> -->
+						<button type="submit" class="btn btn-primary">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						</button>
+					</form>
+    			</div>
+    		</div>
+		</div>
 		<footer class="footer">
 			<div class="container">
 				<div class="text-muted">
