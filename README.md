@@ -12,3 +12,4 @@
   - [ ] Deletion
   - [ ] Page IDs
   - [ ] Commenting?
+  - [ ] Privacy Settings
