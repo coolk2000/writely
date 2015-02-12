@@ -10,9 +10,9 @@ a:hover {
 a:active {
   color: #808080
 }
-html, body {
+/*html, body {
   height: 100%;
-}
+}*/
 .jumbotron.vertical-center {
   margin-bottom: 0;
 }
@@ -36,9 +36,9 @@ html, body {
   -webkit-justify-content : center;
           justify-content : center;
 }
-.container {
+/*.container {
   background-color: #fff
-}
+}*/
 .jumbotron {
   background-color: #fff
 }
