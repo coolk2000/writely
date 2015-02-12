@@ -13,3 +13,7 @@
   - [ ] Page IDs
   - [ ] Commenting?
   - [ ] Privacy Settings
+- [ ] Login
+  - [ ] HTTPS
+  - [x] Login page
+  - [ ] Registration page
