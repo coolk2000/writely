@@ -24,6 +24,10 @@ if (login_check($mysqli) == true) {
 	<?php
 	}
 ?>
+<?php if (login_check($mysqli) == true) {
+        	header('Location: ./user/');
+        }
+        ?>
 	<head>
 		<title>writely; home</title>
 		<meta charset="utf-8">
