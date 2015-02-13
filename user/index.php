@@ -13,7 +13,7 @@ if (login_check($mysqli) == true) {
 
 <!DOCTYPE html>
 <?php if ($logged === 'out') {
-        	header('Location: ../index?msg=already_logged_in!');
+        	header('Location: ../index?msg=not_logged_in!');
         }
         ?>
 <html lang="en">
@@ -67,7 +67,7 @@ if (login_check($mysqli) == true) {
 		<div class="container">
 			<div class="centered text-center">
 				<h1>welcome, <?php echo htmlentities($_SESSION['username']) ?>!</h1>
-				<small>not you? <a href="../includes/logout.php">logout.</a> (Test: your admin level: <?php echo htmlentities($_SESSION['isAdmin']) ?>)</small>
+				<small>not you? <a href="../includes/logout.php">logout.</a></small>
 			</div>
 		</div>
 		<footer class="footer">
