@@ -30,8 +30,11 @@ if (login_check($mysqli) == true) {
         if (isset($_GET['error'])) {
             echo '<p class="error">Error Logging In!</p>';
         }
+        if ($logged === 'in') {
+        	header('Location: ./index');
+        }
         ?>
-		<div class="container">
+        <div class="container">
 			<div class="centered text-center">
 				<div class="jumbotron">
 					<h1>login</h1>

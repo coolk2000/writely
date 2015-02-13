@@ -1,3 +1,11 @@
+<?php
+$error = filter_input(INPUT_GET, 'err', $filter = FILTER_SANITIZE_STRING);
+ 
+if (! $error) {
+    $error = 'writely';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -14,7 +22,7 @@
 		<div class="container">
 			<div class="centered text-center">
 				<div class="jumbotron">
-					<h1>writely</h1>
+					<h1><?php echo $error; ?></h1>
 					<form action="login">
 						<button type="submit" class="btn btn-primary">
 							Login
