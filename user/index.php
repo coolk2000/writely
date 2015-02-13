@@ -39,12 +39,6 @@ if (login_check($mysqli) == true) {
 		<link href="../css/index.css" rel="stylesheet">
 		<link href="../css/user.css" rel="stylesheet">
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script> 
-    	<script> 
-    		$(function(){
-      			$("#nav").load("../navbar/index.html"); 
-      			$("#nav_2").load("../navbar/index2.html"); 
-    		});
-    	</script>
 	</head>
 	<body>
 
@@ -60,10 +54,11 @@ if (login_check($mysqli) == true) {
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="../index">Home</a></li>
+            <li class="active"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+            <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-          	<li><a><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?></a></li>
+          	<li><a></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

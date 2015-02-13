@@ -8,7 +8,7 @@ function sec_session_start() {
 	$httponly = true;
 	// Forces sessions to only use cookies.
 	if (ini_set('session.use_only_cookies', 1) === FALSE) {
-		header("Location: ../errors/error.php?err=could not initiate a safe session (ini_set)");
+		header("Location: ../error.php?err=could not initiate a safe session (ini_set)");
 		exit();
 	}
 	// Gets current cookies params.
@@ -26,7 +26,7 @@ function sec_session_start() {
 
 function login($username, $password, $mysqli) {
 	// Using prepared statements means that SQL injection is not possible. 
-	if ($stmt = $mysqli->prepare("SELECT id, username, password, salt 
+	if ($stmt = $mysqli->prepare("SELECT id, username, password, salt, admin 
 		FROM users
 	   WHERE username = ?
 		LIMIT 1")) {
@@ -35,7 +35,7 @@ function login($username, $password, $mysqli) {
 		$stmt->store_result();
  
 		// get variables from result.
-		$stmt->bind_result($user_id, $username, $db_password, $salt);
+		$stmt->bind_result($user_id, $username, $db_password, $salt, $admin);
 		$stmt->fetch();
  
 		// hash the password with the unique salt.
@@ -63,6 +63,7 @@ function login($username, $password, $mysqli) {
 																"", 
 																$username);
 					$_SESSION['username'] = $username;
+					$_SESSION['isAdmin'] = $admin;
 					$_SESSION['login_string'] = hash('sha512', 
 							  $password . $user_browser);
 					// Login successful.
@@ -113,11 +114,13 @@ function login_check($mysqli) {
 	// Check if all session variables are set 
 	if (isset($_SESSION['user_id'], 
 						$_SESSION['username'], 
+						$_SESSION['isAdmin'],
 						$_SESSION['login_string'])) {
  
 		$user_id = $_SESSION['user_id'];
 		$login_string = $_SESSION['login_string'];
 		$username = $_SESSION['username'];
+		$admin = $_SESSION['isAdmin'];
  
 		// Get the user-agent string of the user.
 		$user_browser = $_SERVER['HTTP_USER_AGENT'];
