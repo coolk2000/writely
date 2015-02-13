@@ -61,6 +61,6 @@ if (isset($_POST['username'], $_POST['p'])) {
                 header('Location: ../errors/error.php?err=Registration failure: INSERT');
             }
         }
-        header('Location: ./register_success.php');
+        header('Location: ./index?msg=registered!_log_in_below.');
     }
 }

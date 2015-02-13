@@ -26,12 +26,34 @@ if (login_check($mysqli) == true) {
         <script type="text/JavaScript" src="js/forms.js"></script> 
 	</head>
 	<body>
+
+		<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index">Home</a></li>
+            <li><a href="register">Register</a></li>
+            <li class="active"><a href="#">Login</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
 		<?php
         if (isset($_GET['error'])) {
             echo '<p class="error">Error Logging In!</p>';
         }
-        if ($logged === 'in') {
-        	header('Location: ./index');
+        ?>
+        <?php if ($logged === 'in') {
+        	header('Location: ./index?msg=already_logged_in!');
         }
         ?>
         <div class="container">
@@ -56,16 +78,7 @@ if (login_check($mysqli) == true) {
 							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 						</button>
 					</form>
-					<?php
-        				if (login_check($mysqli) == true) {
-                        	echo '<p>Currently logged ' . $logged . ' as ' . htmlentities($_SESSION['username']) . '.</p>';
- 
-            				echo '<p>Do you want to change user? <a href="includes/logout.php">Log out</a>.</p>';
-        				} else {
-                        	echo '<p>Currently logged ' . $logged . '.</p>';
-                        	echo "<p>If you don't have a login, please <a href='register.php'>register</a></p>";
-                		}
-					?>
+					or <a href="register">register</a>.
 				</div>
 			</div>
 		</div>

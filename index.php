@@ -1,8 +1,8 @@
 <?php
-$error = filter_input(INPUT_GET, 'err', $filter = FILTER_SANITIZE_STRING);
+$msg = filter_input(INPUT_GET, 'msg', $filter = FILTER_SANITIZE_STRING);
  
-if (! $error) {
-    $error = 'writely';
+if (! $msg) {
+    $msg = 'writely';
 }
 ?>
 
@@ -19,10 +19,32 @@ if (! $error) {
 		<link href="css/index.css" rel="stylesheet">
 	</head>
 	<body>
+
+		<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">writely</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="register">Register</a></li>
+            <li><a href="login">Login</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
 		<div class="container">
 			<div class="centered text-center">
 				<div class="jumbotron">
-					<h1><?php echo $error; ?></h1>
+					<h1><?php echo str_replace("_", " ", $msg); ?></h1>
 					<form action="login">
 						<button type="submit" class="btn btn-primary">
 							Login
@@ -39,5 +61,7 @@ if (! $error) {
 				</div>
 			</div>
 		</footer>
+		<script src="modules/jquery/jquery-2.1.3.min.js"></script>
+    	<script src="modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>

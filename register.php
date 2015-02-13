@@ -1,6 +1,14 @@
 <?php
 include_once 'includes/register.inc.php';
 include_once 'includes/db_functions.php';
+ 
+sec_session_start();
+ 
+if (login_check($mysqli) == true) {
+    $logged = 'in';
+} else {
+    $logged = 'out';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +25,32 @@ include_once 'includes/db_functions.php';
         <link href="css/register.css" rel="stylesheet">
     </head>
 	<body>
+		<?php if ($logged === 'in') {
+        	header('Location: ./index?msg=already_logged_in!');
+        }
+        ?>
+
+		<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">writely</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index">Home</a></li>
+            <li class="active"><a href="#">Register</a></li>
+            <li><a href="login">Login</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
 		<!-- Registration form to be output if the POST variables are not
 		set or if the registration script caused an error. -->
         <?php
@@ -57,5 +91,7 @@ include_once 'includes/db_functions.php';
 				</div>
 			</div>
 		</footer>
+		<script src="modules/jquery/jquery-2.1.3.min.js"></script>
+    	<script src="modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>
