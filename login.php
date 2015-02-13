@@ -1,3 +1,16 @@
+<?php
+include_once 'includes/db_connect.php';
+include_once 'includes/db_functions.php';
+ 
+sec_session_start();
+ 
+if (login_check($mysqli) == true) {
+    $logged = 'in';
+} else {
+    $logged = 'out';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -9,32 +22,49 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		<link href="css/footer.css" rel="stylesheet">
 		<link href="css/login.css" rel="stylesheet">
+		<script type="text/JavaScript" src="js/sha512.js"></script> 
+        <script type="text/JavaScript" src="js/forms.js"></script> 
 	</head>
 	<body>
+		<?php
+        if (isset($_GET['error'])) {
+            echo '<p class="error">Error Logging In!</p>';
+        }
+        ?>
 		<div class="container">
 			<div class="centered text-center">
 				<div class="jumbotron">
 					<h1>login</h1>
-					<form class="form-inline">
+					<form class="form-inline" action="includes/login_process.php" method="post" name="login_form">
 						<div class="form-group">
 							<label class="sr-only" for="inputUsername">Username</label>
-							<input type="username" class="form-control" id="inputUsername" placeholder="Username">
+							<input type="username" class="form-control" id="inputUsername" name="username" placeholder="Username">
 						</div>
 						<div class="form-group">
 							<label class="sr-only" for="inputPassword">Password</label>
-							<input type="password" class="form-control" id="inputPassword" placeholder="Password">
+							<input type="password" name="password" class="form-control" id="password" placeholder="Password">
 						</div>
 						<!-- <div class="checkbox">
 							<label>
 								<input type="checkbox"> Remember me
 							</label>
 						</div> -->
-						<button type="submit" class="btn btn-primary">
+						<button type="submit" class="btn btn-primary" value="Login" onclick="formhash(this.form, this.form.password);">
 							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 						</button>
 					</form>
-    			</div>
-    		</div>
+					<?php
+        				if (login_check($mysqli) == true) {
+                        	echo '<p>Currently logged ' . $logged . ' as ' . htmlentities($_SESSION['username']) . '.</p>';
+ 
+            				echo '<p>Do you want to change user? <a href="includes/logout.php">Log out</a>.</p>';
+        				} else {
+                        	echo '<p>Currently logged ' . $logged . '.</p>';
+                        	echo "<p>If you don't have a login, please <a href='register.php'>register</a></p>";
+                		}
+					?>
+				</div>
+			</div>
 		</div>
 		<footer class="footer">
 			<div class="container">
