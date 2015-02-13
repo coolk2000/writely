@@ -7,10 +7,18 @@
     - [ ] Custom CSS
     - [ ] Simpler Custom Page
   - [ ] Home
-- [ ] Pages
+  - [x] Registration
+  - [x] Login
+- [ ] Works (pages)
   - [ ] Creation
   - [ ] Deletion
   - [ ] Page IDs
   - [ ] Editing
   - [ ] Commenting?
   - [ ] Privacy Settings
+- [ ] Administration
+  - [ ] Dashboard
+  - [ ] User Deletion
+  - [ ] User Creation
+  - [ ] User Editing
+  - [ ] See All Works
