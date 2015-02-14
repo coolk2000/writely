@@ -1,10 +1,15 @@
 <?php
 include_once 'db_connect.php';
 include_once 'db_config.php';
+require_once 'recaptchalib.php';
+
+$secret = "6LePBwITAAAAAP8-Zvg3fOODI217MLcWaHs7mZEt";
+$response = null;
+$reCaptcha = new ReCaptcha($secret);
  
 $error_msg = "";
  
-if (isset($_POST['username'], $_POST['p'])) {
+if (isset($_POST['username'], $_POST['p'], $_POST['g-recaptcha-response'])) {
     // Sanitize and validate the data passed in
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
  
@@ -13,6 +18,17 @@ if (isset($_POST['username'], $_POST['p'])) {
         // The hashed pwd should be 128 characters long.
         // If it's not, something really odd has happened
         $error_msg .= '<p class="error">Invalid password configuration.</p>';
+    }
+
+    if ($_POST["g-recaptcha-response"]) {
+        $response = $reCaptcha->verifyResponse(
+            $_SERVER["REMOTE_ADDR"],
+            $_POST["g-recaptcha-response"]
+        );
+    }
+
+    if (!($response != null && $response->success)) {
+        $error_msg .= '<p class="error">Incorrect captcha.</p>';
     }
  
     // Username validity and password validity have been checked client side.
@@ -34,7 +50,6 @@ if (isset($_POST['username'], $_POST['p'])) {
                         $error_msg .= '<p class="error">A user with this username already exists</p>';
                         $stmt->close();
                 }
-                $stmt->close();
         } else {
                 $error_msg .= '<p class="error">Database error line 55</p>';
                 $stmt->close();
@@ -58,7 +73,7 @@ if (isset($_POST['username'], $_POST['p'])) {
             $insert_stmt->bind_param('sss', $username, $password, $random_salt);
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
-                header('Location: ../errors/error.php?err=Registration failure: INSERT');
+                header('Location: ../errors/error.php?err=registration failure: INSERT');
             }
         }
         header('Location: ./index?msg=registered!_log_in_below.');

@@ -58,8 +58,8 @@ if (login_check($mysqli) == true) {
             <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-          	<li><a></span><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?></a></li>
-          </ul>
+          	<p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?></p>
+		  </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -78,7 +78,7 @@ if (login_check($mysqli) == true) {
 				</div>
 			</div>
 		</footer>
-		<script src="modules/jquery/jquery-2.1.3.min.js"></script>
-    	<script src="modules/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>
+    	<script src="../modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>
