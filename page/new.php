@@ -81,7 +81,7 @@ if (! $msg) {
 				</div>
 				<div class="checkbox">
 					<label>
-						<input type="checkbox" name="private" value="1">Make Private
+						<input type="checkbox" name="private" value="1">Make Private <span title="Making a page private means only you can view it."><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></span>
 					</label>
 				</div>
 				<br />
