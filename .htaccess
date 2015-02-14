@@ -5,6 +5,7 @@ RewriteRule ^login/?$ login.php [NC]
 RewriteRule ^register/?$ register.php [NC]
 RewriteRule ^error=([^/.]+)?$ error.php?err=$1 [NC]
 RewriteRule ^logout/?$ includes/logout.php [NC]
+RewriteRule ^page/new?$ page/new.php [NC]
 
 ErrorDocument 400 /errors/400.html
 ErrorDocument 401 /errors/401.html

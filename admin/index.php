@@ -46,10 +46,14 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
         <a class="navbar-brand" href="#">writely</a>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="../index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
-            <li><a href="register"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbspRegister</a></li>
-            <li><a href="login"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbspLogin</a></li>
+            <li><a href="../user/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li class=\"active\"><a href=\"../admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
+            <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
+          <ul class="nav navbar-nav navbar-right">
+          	<li><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+          	<p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?><?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "&nbsp<span class=\"label label-info\">Admin</span>";} ?></p>
+		  </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
