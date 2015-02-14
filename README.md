@@ -9,16 +9,16 @@
   - [ ] Home
   - [x] Registration
   - [x] Login
-- [ ] Works (pages)
-  - [ ] Creation
+- [ ] Pages
+  - [x] Creation
   - [ ] Deletion
-  - [ ] Page IDs
+  - [x] Page IDs
   - [ ] Editing
   - [ ] Commenting?
-  - [ ] Privacy Settings
+  - [x] Privacy Settings
 - [ ] Administration
   - [ ] Dashboard
   - [ ] User Deletion
   - [ ] User Creation
   - [ ] User Editing
-  - [ ] See All Works
+  - [ ] See All Pages
