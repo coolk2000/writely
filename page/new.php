@@ -1,5 +1,5 @@
 <?php
-include_once '../includes/db_connect.php';
+include_once '../includes/newpage.php';
 include_once '../includes/db_functions.php';
 include '../modules/inspiration.php';
  
@@ -10,6 +10,13 @@ if (login_check($mysqli) == true) {
 } else {
     $logged = 'out';
 }
+
+$msg = filter_input(INPUT_GET, 'msg', $filter = FILTER_SANITIZE_STRING);
+
+if (! $msg) {
+    $msg = '';
+}
+?>
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +47,7 @@ if (login_check($mysqli) == true) {
 		<link href="../css/index.css" rel="stylesheet">
 		<link href="../css/user.css" rel="stylesheet">
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script> 
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 	</head>
 	<body>
 
@@ -73,13 +81,30 @@ if (login_check($mysqli) == true) {
 				<h3 style="display:inline"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> New Page</h3><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-primary">Configure</span></h4>
 			</div>
 			<hr style="margin-top:8px"/>
-			<div class="centered text-center">
-			<form class="form-configure" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" method="post" name="new_page_configuration">
+			<form class="form-register" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" method="post" name="new_page_configuration">
 				<div class="input-group">
-					<span class="input-group-addon" id="basic-addon1">Page Title</span>
-					<input type="text" class="form-control" placeholder="<?php echo $sentence ?>" aria-describedby="basic-addon1">
+					<span class="input-group-addon">Page Title</span>
+					<input type="text" name="title" class="form-control" id="title" placeholder="<?php echo $sentence ?>" aria-label="Page Title">
+					<span class="input-group-addon">(Max 140 Characters)</span>
 				</div>
-			</div>
+				<br />
+				<div class="input-group">
+					<span class="input-group-addon">Your Username</span>
+					<input type="text" name="owner" class="form-control" id="owner" placeholder="<?php echo htmlentities($_SESSION['username']) ?>" aria-label="Page Owner">
+					<span class="input-group-addon">(This is so you claim ownership of your own page, case sensitive)</span>
+				</div>
+				<!-- <div class="checkbox">
+					<label>
+						<input type="checkbox" name="private" id="private">Make Private
+					</label>
+				</div> -->
+				<br />
+				<div class="g-recaptcha" data-sitekey="6LePBwITAAAAALUD9aBgm2UnPghov9wXQqCU4Ycq"></div>
+				<br />
+				<button type="button" value="Create" class="btn btn-primary" onclick="form.submit();">
+					<span class="glyphicon glyphicon-save" aria-hidden="true"></span>&nbsp&nbspCreate
+				</button>
+			</form>
 		</div>
 		<footer class="footer">
 			<div class="container">
