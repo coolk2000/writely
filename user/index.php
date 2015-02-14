@@ -56,6 +56,7 @@ if (login_check($mysqli) == true) {
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li><a href=\"../admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
             <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -67,7 +68,7 @@ if (login_check($mysqli) == true) {
 
 		<div class="container">
 			<div class="centered text-center">
-				<h1>welcome, <?php echo htmlentities($_SESSION['username']) ?>!</h1>
+				<h1 class="new-page"><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></h1>
 				<small>not you? <a href="../includes/logout.php">logout.</a></small>
 			</div>
 		</div>

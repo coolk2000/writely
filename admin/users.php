@@ -84,7 +84,7 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 				echo "</table>";
 				echo "<ul class=\"pager\">";
 				if ($prev >= 0)
-				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.$prev.'">Previous</a></li>';
+				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.$prev.'">Previous</a></li>&nbsp';
 				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.($page+1).'">Next</a></li></ul>';
 			?>
 		</div>

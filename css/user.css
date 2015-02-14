@@ -16,3 +16,6 @@ body {
   text-align: center;
   margin: auto;
 }
+.new-page a:link {
+  color: #000;
+}
