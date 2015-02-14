@@ -42,8 +42,8 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">writely</a>
         </div>
+        <a class="navbar-brand" href="#">writely</a>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="../index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
@@ -77,5 +77,7 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 				?>
 			</div>
 		</div>
+		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>
+    	<script src="../modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>

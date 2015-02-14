@@ -42,40 +42,53 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">writely</a>
         </div>
+        <a class="navbar-brand" href="#">writely</a>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="../index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
-            <li><a href="register"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbspRegister</a></li>
-            <li><a href="login"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbspLogin</a></li>
+            <li class="active"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+            <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
+          <ul class="nav navbar-nav navbar-right">
+          	<p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?></p>
+		  </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
 		<div class="container">
-			<div class="panel panel-default">
-  				<div class="panel-heading"><h4>User Database</h4></div>
-  				<?php
-  					$usertable = "SELECT id, username, admin FROM users";
-					$result = $mysqli->query($usertable);
-
-					echo "<table class=\"table\">
-					<tr>
-					<th>ID</th><th>Username</th><th>isAdmin</th>
-					<tr>";
-
-					while($row = mysqli_fetch_array($result))
-					{
-						echo "<tr>";
-						echo "<td>" . $row['id'] . "</td>";
-						echo "<td>" . $row['username'] . "</td>";
-						echo "<td>" . $row['admin'] . "</td>";
+			<h4>User Database</h4>
+				<?php
+					if (!isset($_GET['page']) or !is_numeric($_GET['page'])) {
+						$page = 0;
+					} else {
+						$page = (int)$_GET['page'];
 					}
-					echo "</table>";
-				?>
-			</div>
+				$rows = $page * 10;
+				$prev = $page - 1;
+				$fetch = "SELECT id, username, admin FROM users LIMIT $rows, 10";
+				$result = $mysqli->query($fetch)or die(mysql_error());
+
+				echo "<table class=\"table\">
+				<tr>
+				<th>ID</th><th>Username</th><th>isAdmin</th>
+				<tr>";
+
+				while($row = mysqli_fetch_array($result))
+				{
+					echo "<tr>";
+					echo "<td>" . $row['id'] . "</td>";
+					echo "<td>" . $row['username'] . "</td>";
+					echo "<td>" . $row['admin'] . "</td>";
+				}
+				echo "</table>";
+				echo "<ul class=\"pager\">";
+				if ($prev >= 0)
+				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.$prev.'">Previous</a></li>';
+				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.($page+1).'">Next</a></li></ul>';
+			?>
 		</div>
+		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>
+    	<script src="../modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>

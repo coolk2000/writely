@@ -52,6 +52,7 @@ if (login_check($mysqli) == true) {
             <span class="icon-bar"></span>
           </button>
         </div>
+        <a class="navbar-brand" href="#">writely</a>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
