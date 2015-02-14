@@ -17,7 +17,6 @@ if (! $msg) {
     $msg = '';
 }
 ?>
-?>
 
 <!DOCTYPE html>
 <?php if ($logged === 'out') {
@@ -25,17 +24,6 @@ if (! $msg) {
         }
         ?>
 <html lang="en">
-<?php
-if (login_check($mysqli) == true) {
-    ?>
-    	<style type="text/css">#nav{display:none;}</style>
-    <?php
-	} else {
-	?>
-		<style type="text/css">#nav_2{display:none;}</style>
-	<?php
-	}
-?>
 	<head>
 		<title>writely; new page</title>
 		<meta charset="utf-8">
@@ -88,16 +76,14 @@ if (login_check($mysqli) == true) {
 					<span class="input-group-addon">(Max 140 Characters)</span>
 				</div>
 				<br />
-				<div class="input-group">
-					<span class="input-group-addon">Your Username</span>
-					<input type="text" name="owner" class="form-control" id="owner" placeholder="<?php echo htmlentities($_SESSION['username']) ?>" aria-label="Page Owner">
-					<span class="input-group-addon">(This is so you claim ownership of your own page, case sensitive)</span>
+				<div class="input-group" style="display:none">
+					<input type="text" name="owner" class="form-control" id="owner" value="<?php echo htmlentities($_SESSION['username']) ?>" aria-label="Page Owner">
 				</div>
-				<!-- <div class="checkbox">
+				<div class="checkbox">
 					<label>
-						<input type="checkbox" name="private" id="private">Make Private
+						<input type="checkbox" name="private" value="1">Make Private
 					</label>
-				</div> -->
+				</div>
 				<br />
 				<div class="g-recaptcha" data-sitekey="6LePBwITAAAAALUD9aBgm2UnPghov9wXQqCU4Ycq"></div>
 				<br />

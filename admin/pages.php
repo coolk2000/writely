@@ -59,11 +59,42 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
     </nav>
 
 		<div class="container">
-  				<ul class="nav nav-tabs">
-  					<li role="presentation" class="active"><a href="#">Dashboard</a></li>
+			<ul class="nav nav-tabs">
+  					<li role="presentation"><a href="index.php">Dashboard</a></li>
   					<li role="presentation"><a href="users.php">User List</a></li>
-  					<li role="presentation"><a href="pages.php">Page List</a></li>
+  					<li role="presentation" class="active"><a href="#">Page List</a></li>
 				</ul>
+			<h4>Page Database</h4>
+				<?php
+					if (!isset($_GET['page']) or !is_numeric($_GET['page'])) {
+						$page = 0;
+					} else {
+						$page = (int)$_GET['page'];
+					}
+				$rows = $page * 10;
+				$prev = $page - 1;
+				$fetch = "SELECT id, title, owner, private FROM pages LIMIT $rows, 10";
+				$result = $mysqli->query($fetch)or die(mysql_error());
+
+				echo "<table class=\"table\">
+				<tr>
+				<th>ID</th><th>Title</th><th>Owner</th><th>isPrivate</th>
+				<tr>";
+
+				while($row = mysqli_fetch_array($result))
+				{
+					echo "<tr>";
+					echo "<td>" . $row['id'] . "</td>";
+					echo "<td>" . $row['title'] . "</td>";
+					echo "<td>" . $row['owner'] . "</td>";
+					echo "<td>" . $row['private'] . "</td>";
+				}
+				echo "</table>";
+				echo "<ul class=\"pager\">";
+				if ($prev >= 0)
+				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.$prev.'">Previous</a></li>&nbsp';
+				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.($page+1).'">Next</a></li></ul>';
+			?>
 		</div>
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>
     	<script src="../modules/bootstrap/js/bootstrap.min.js"></script>

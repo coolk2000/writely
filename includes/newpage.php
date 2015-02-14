@@ -15,6 +15,15 @@ if (isset($_POST['title'], $_POST['owner'], $_POST['g-recaptcha-response'])) {
  
     $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
 
+    
+    if (isset($_POST['private'])) {
+      if ($_POST['private'] == "1") {
+        $private = '1';
+        }
+    } else {
+        $private = '0';
+    }
+
     if ($_POST["g-recaptcha-response"]) {
         $response = $reCaptcha->verifyResponse(
             $_SERVER["REMOTE_ADDR"],
@@ -58,13 +67,13 @@ if (isset($_POST['title'], $_POST['owner'], $_POST['g-recaptcha-response'])) {
     if (empty($error_msg)) {
  
         // Insert the new page into the database 
-        if ($insert_stmt = $mysqli->prepare("INSERT INTO pages (title, owner) VALUES (?, ?)")) {
-            $insert_stmt->bind_param('ss', $title, $owner);
+        if ($insert_stmt = $mysqli->prepare("INSERT INTO pages (title, owner, private) VALUES (?, ?, ?)")) {
+            $insert_stmt->bind_param('ssi', $title, $owner, $private);
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
                 header('Location: ../errors/error.php?err=registration failure: INSERT');
             }
         }
-        header('Location: ./index');
+        header('Location: ../index');
     }
 }
