@@ -27,6 +27,19 @@ if (login_check($mysqli) == true) {
 		<style type="text/css">#nav_2{display:none;}</style>
 	<?php
 	}
+
+$prep_stmt = "SELECT id FROM pages WHERE owner = ?";
+    $stmt = $mysqli->prepare($prep_stmt);
+ 
+    if ($stmt) {
+    	$stmt->bind_param('s', htmlentities($_SESSION['username']));
+        $stmt->execute();
+        $stmt->store_result();
+        
+        $num_pages = $stmt->num_rows;
+        
+        $stmt->close();
+        }
 ?>
 	<head>
 		<title>writely; <?php echo htmlentities($_SESSION['username']) ?></title>
@@ -61,6 +74,7 @@ if (login_check($mysqli) == true) {
           </ul>
           <ul class="nav navbar-nav navbar-right">
           	<li><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+          	<li><a href="settings"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
           	<p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?><?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "&nbsp<span class=\"label label-info\">Admin</span>";} ?></p>
 		  </ul>
         </div><!--/.nav-collapse -->
@@ -69,8 +83,7 @@ if (login_check($mysqli) == true) {
 
 		<div class="container">
 			<div class="centered text-center">
-				<h1 class="new-page"><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></h1>
-				<small>not you? <a href="../includes/logout.php">logout.</a></small>
+				<h1>Hi, <?php echo htmlentities($_SESSION['username']) ?>!</h1><h2><?php if ($num_pages == 0) {echo "You haven't written any pages! Why not <a href='../page/new'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Make one?</a>";} else {echo "You've written <span class='label label-warning'>".$num_pages." pages</span> so far.";} ?>
 			</div>
 		</div>
 		<footer class="footer">

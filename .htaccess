@@ -1,6 +1,7 @@
 RewriteEngine On
 
 RewriteRule ^index/?$ index.php [NC]
+RewriteRule ^user/settings/?$ user/settings.php [NC]
 RewriteRule ^login/?$ login.php [NC]
 RewriteRule ^register/?$ register.php [NC]
 RewriteRule ^error=([^/.]+)?$ error.php?err=$1 [NC]
