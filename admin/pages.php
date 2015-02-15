@@ -47,7 +47,7 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="../user/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
-            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li class=\"active\"><a href=\"../admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
+            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li class=\"active\"><a href=\"#\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
             <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -78,7 +78,7 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 
 				echo "<table class=\"table\">
 				<tr>
-				<th>ID</th><th>Title</th><th>Owner</th><th>isPrivate</th>
+				<th>ID</th><th>Title</th><th>Owner</th><th>isPrivate</th><th>Link to Page</th>
 				<tr>";
 
 				while($row = mysqli_fetch_array($result))
@@ -88,6 +88,7 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 					echo "<td>" . $row['title'] . "</td>";
 					echo "<td>" . $row['owner'] . "</td>";
 					echo "<td>" . $row['private'] . "</td>";
+					echo "<td><a href='/page/view/" . $row['id'] . "'>Go</a>";
 				}
 				echo "</table>";
 				echo "<ul class=\"pager\">";

@@ -10,4 +10,8 @@ Hello,
 
 \>this is an escaped format
 
+~~This is a strikethrough
+
+#This is an h1
+
 Goodbye!

@@ -3,24 +3,33 @@ include_once '../includes/db_connect.php';
 include_once '../includes/db_functions.php';
  
 sec_session_start();
-
+ 
 if (login_check($mysqli) == true) {
     $logged = 'in';
 } else {
     $logged = 'out';
 }
-
-if (htmlentities($_SESSION['isAdmin']) == 1) {
-	$adminStatus = true;
-} else {
-	header('Location: ../errors/401.html');
-}
 ?>
 
 <!DOCTYPE html>
+<?php if ($logged === 'out') {
+        	header('Location: ../index?msg=not_logged_in!');
+        }
+        ?>
 <html lang="en">
+<?php
+if (login_check($mysqli) == true) {
+    ?>
+    	<style type="text/css">#nav{display:none;}</style>
+    <?php
+	} else {
+	?>
+		<style type="text/css">#nav_2{display:none;}</style>
+	<?php
+	}
+?>
 	<head>
-		<title>writely; admin</title>
+		<title>writely; <?php echo htmlentities($_SESSION['username']) ?></title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,8 +55,8 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
         <a class="navbar-brand" href="#">writely</a>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="../user/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
-            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li class=\"active\"><a href=\"#\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
+            <li class="active"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li><a href=\"../admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
             <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -59,43 +68,19 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
     </nav>
 
 		<div class="container">
-			<ul class="nav nav-tabs">
-  					<li role="presentation"><a href="index.php">Dashboard</a></li>
-  					<li role="presentation" class="active"><a href="#">User List</a></li>
-  					<li role="presentation"><a href="pages.php">Page List</a></li>
-				</ul>
-			<h4>User Database</h4>
-				<?php
-					if (!isset($_GET['page']) or !is_numeric($_GET['page'])) {
-						$page = 0;
-					} else {
-						$page = (int)$_GET['page'];
-					}
-				$rows = $page * 10;
-				$prev = $page - 1;
-				$fetch = "SELECT id, username, admin FROM users LIMIT $rows, 10";
-				$result = $mysqli->query($fetch)or die(mysql_error());
-
-				echo "<table class=\"table\">
-				<tr>
-				<th>ID</th><th>Username</th><th>isAdmin</th>
-				<tr>";
-
-				while($row = mysqli_fetch_array($result))
-				{
-
-					echo "<tr>";
-					echo "<td>" . $row['id'] . "</td>";
-					echo "<td>" . $row['username'] . "</td>";
-					echo "<td>" . $row['admin'] . "</td>";
-				}
-				echo "</table>";
-				echo "<ul class=\"pager\">";
-				if ($prev >= 0)
-				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.$prev.'">Previous</a></li>&nbsp';
-				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.($page+1).'">Next</a></li></ul>';
-			?>
+			<div class="centered text-center">
+				<h1 class="new-page"><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></h1>
+				<small>not you? <a href="../includes/logout.php">logout.</a></small>
+			</div>
 		</div>
+		<footer class="footer">
+			<div class="container">
+				<div class="text-muted">
+					<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
+					2015 Jake Koenen | <script type="text/javascript" src="../modules/footquote/random.php?type=1"></script>
+				</div>
+			</div>
+		</footer>
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>
     	<script src="../modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>

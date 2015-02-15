@@ -98,10 +98,9 @@ if (login_check($mysqli) == true) {
     </nav>
 
 		<div class="container">
-			<div>
 				<h3 style="display:inline"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> <?php echo $title; ?></h3> <span class="page-title">&nbspBy <?php echo $owner; ?></span><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-info">View</span><?php if ($private == 1) {echo "&nbsp<span class=\"label label-warning\" title=\"Only you can view this page\">Private <span class=\"glyphicon glyphicon-question-sign\" aria-hidden=\"true\"></span>";} ?></h4>
-			</div>
 			<hr style="margin-top:8px"/>
+			<div style="display:inline;">
 			<!-- <h4 style="margin-top:-14px;float:right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> By <?php echo $owner; ?></h4> -->
 				<?php
 				$file = '../page_files/'.$id.'.txt';

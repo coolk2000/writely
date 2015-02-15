@@ -15,6 +15,30 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 } else {
 	header('Location: ../errors/401.html');
 }
+
+$prep_stmt = "SELECT id FROM users";
+    $stmt = $mysqli->prepare($prep_stmt);
+ 
+    if ($stmt) {
+        $stmt->execute();
+        $stmt->store_result();
+        
+        $num_users = $stmt->num_rows;
+        
+        $stmt->close();
+        }
+
+$prep_stmt = "SELECT id FROM pages";
+    $stmt = $mysqli->prepare($prep_stmt);
+ 
+    if ($stmt) {
+        $stmt->execute();
+        $stmt->store_result();
+        
+        $num_pages = $stmt->num_rows;
+        
+        $stmt->close();
+        }
 ?>
 
 <!DOCTYPE html>
@@ -47,13 +71,13 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="../user/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
-            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li class=\"active\"><a href=\"../admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
+            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li class=\"active\"><a href=\"#\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
             <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-          	<li><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
-          	<p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?><?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "&nbsp<span class=\"label label-info\">Admin</span>";} ?></p>
-		  </ul>
+            <li><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+            <p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?><?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "&nbsp<span class=\"label label-info\">Admin</span>";} ?></p>
+      </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -65,6 +89,10 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
   					<li role="presentation"><a href="pages.php">Page List</a></li>
 				</ul>
 		</div>
+    <div class="container">
+      <h1>Hi, <?php echo htmlentities($_SESSION['username']) ?>!</h1>
+      <h3>There are <span class="label label-info"><?php echo $num_users; ?> users</span> and <span class="label label-warning"><?php echo $num_pages; ?> pages</span> registered in the database.</h3>
+    </div>
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>
     	<script src="../modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>

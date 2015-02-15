@@ -190,3 +190,33 @@ function esc_url($url) {
 		return $url;
 	}
 }
+
+/*function delpage($pageid) {
+	if ($page_deletion_query = $mysqli->prepare("DELETE FROM pages WHERE id = ?")) {
+            $page_deletion_query->bind_param('s', $pageid);
+            // Execute the prepared query.
+            if (! $page_deletion_query->execute()) {
+                header('Location: ../errors/error.php?err=deletion failure: DELETE');
+            }
+    }
+}
+
+function deluser($userid_1) {
+	if ($user_deletion_query = $mysqli->prepare("DELETE FROM users WHERE id = ?")) {
+            $user_deletion_query->bind_param('i', $userid_1);
+            // Execute the prepared query.
+            if (! $user_deletion_query->execute()) {
+                header('Location: ../errors/error.php?err=deletion failure: DELETE');
+            }
+    }
+}
+
+function makeadmin($userid_2) {
+	if ($makeadmin_query = $mysqli->prepare("UPDATE users SET admin = '1' WHERE id = ?")) {
+            $makeadmin_query->bind_param('i', $userid_2);
+            // Execute the prepared query.
+            if (! $makeadmin_query->execute()) {
+                header('Location: ../errors/error.php?err=change failure: UPDATE');
+            }
+        }
+}*/

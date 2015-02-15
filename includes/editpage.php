@@ -9,8 +9,6 @@ $response = null;
 $reCaptcha = new ReCaptcha($secret);
 
 $error_msg = "";
-
-
  
 if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha-response'])) {
     // Sanitize and validate the data passed in
@@ -80,6 +78,6 @@ if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha
         $pagefile = fopen("../page_files/".$id.".txt", "w");
         fwrite($pagefile, $contents);
         fclose($pagefile);
-        header('Location: ../page/view/', $id);
+        header('Location: ../page/view/'.$id.'');
     }
 }
