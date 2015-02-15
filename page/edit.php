@@ -1,9 +1,7 @@
 <?php
-include_once '../includes/db_connect.php';
+include_once '../includes/editpage.php';
 include_once '../includes/db_functions.php';
-include '../includes/id_gen.php';
-include '../modules/parsedown/Parsedown.php';
-$parsedown = new Parsedown();
+include '../modules/inspiration.php';
  
 sec_session_start();
  
@@ -42,23 +40,29 @@ $stmt->bind_param("s", $id);
 $stmt->execute();
 $stmt->bind_result($title, $owner, $private);
 $stmt->fetch();
+
+if (!(htmlentities($_SESSION['username']) == $owner || htmlentities($_SESSION['isAdmin']) == 1)) {
+	header('Location: /index');
+}
+
+$file = '../page_files/'.$id.'.txt';
+$open = fopen($file, 'r');
+if (filesize($file) == 0) {
+	$data = null;
+} else {
+	$data = fread($open,filesize($file));
+}
+fclose($open);
 ?>
 
 <!DOCTYPE html>
+<?php if ($logged === 'out') {
+        	header('Location: /index?msg=not_logged_in!');
+        }
+        ?>
 <html lang="en">
-<?php
-if (login_check($mysqli) == true) {
-    ?>
-    	<style type="text/css">#nav{display:none;}</style>
-    <?php
-	} else {
-	?>
-		<style type="text/css">#nav_2{display:none;}</style>
-	<?php
-	}
-?>
 	<head>
-		<title>writely; <?php echo htmlentities($_SESSION['username']) ?></title>
+		<title>writely; edit page</title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -68,6 +72,7 @@ if (login_check($mysqli) == true) {
 		<link href="/css/index.css" rel="stylesheet">
 		<link href="/css/user.css" rel="stylesheet">
 		<script src="/modules/jquery/jquery-2.1.3.min.js"></script> 
+		<script src='https://www.google.com/recaptcha/api.js'></script>
 	</head>
 	<body>
 
@@ -87,7 +92,7 @@ if (login_check($mysqli) == true) {
             <li><a href="/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
             <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li><a href=\"/admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
             <li><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
-            <?php if (htmlentities($_SESSION['isAdmin']) == 1 || htmlentities($_SESSION['username']) == $owner) {echo "<li><a href='/page/edit/".$id."'><span class='glyphicon glyphicon-wrench' aria-hidden='true'></span> Edit</a></li>";} ?>
+            <li class="active"><a href="#"><span class='glyphicon glyphicon-wrench' aria-hidden='true'></span> Edit</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
           	<li><a href="/page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
@@ -99,22 +104,45 @@ if (login_check($mysqli) == true) {
 
 		<div class="container">
 			<div>
-				<h3 style="display:inline"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> <?php echo $title; ?></h3> <span class="page-title">&nbspBy <?php echo $owner; ?></span><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-info">View</span><?php if ($private == 1) {echo "&nbsp<span class=\"label label-warning\" title=\"Only you can view this page\">Private <span class=\"glyphicon glyphicon-question-sign\" aria-hidden=\"true\"></span>";} ?></h4>
+				<h3 style="display:inline"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editing <span class="page-title">"<?php echo $title; ?>"</span></h3><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-danger">Edit</span>
 			</div>
 			<hr style="margin-top:8px"/>
-			<!-- <h4 style="margin-top:-14px;float:right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> By <?php echo $owner; ?></h4> -->
-				<?php
-				$file = '../page_files/'.$id.'.txt';
-				$open = fopen($file, 'r');
-				if (filesize($file) == 0) {
-					echo '<div class="centered text-center"><div class="jumbotron"><h2 style="color:#e5e5e5"><script type="text/javascript" src="/modules/emptypage/random.php?type=1"></script></h2></div></div>';
-				} else {
-					$data = fread($open,filesize($file));
-					echo $parsedown->text($data);
-				}
-				fclose($open);
-				?>
+			<form class="form-register" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" method="post" name="edit_page">
+				<div class="input-group">
+				<span class="input-group-addon">Page Title</span>
+				<input type="text" name="title" class="form-control" id="title" placeholder="<?php echo $sentence ?>" aria-label="Page Title">
+				<span class="input-group-addon">(Max 140 Characters)</span>
 			</div>
+			<div class="input-group" style="display:none">
+					<input type="text" name="id" class="form-control" id="id" value="<?php echo $id; ?>" aria-label="Page ID">
+				</div>
+			<br />
+				<script type="text/javascript">var titledata = <?php echo json_encode($title); ?>; document.getElementById("title").value = titledata;</script>
+				<textarea type="text" rows="15" name="contents" class="form-control" id="contents" placeholder="<?php echo $sentence ?>" aria-label="Page Contents"></textarea>
+				<script type="text/javascript">var textdata = <?php echo json_encode($data); ?>; document.getElementById("contents").value = textdata;</script>
+				<br />
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="private" value="1" id="private">Make Private <span title="Making a page private means only you can view it."><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></span>
+					</label>
+					<?php
+					if ($private == 1) {
+						echo '<script type="text/javascript">document.getElementById("private").checked = true;</script>';
+					} else {
+						echo '<script type="text/javascript">document.getElementById("private").checked = false;</script>';
+					}
+					?>
+				</div>
+				<br />
+				<div class="g-recaptcha" data-sitekey="6LePBwITAAAAALUD9aBgm2UnPghov9wXQqCU4Ycq"></div>
+				<br />
+				<button type="button" value="Save" class="btn btn-success" onclick="form.submit();">
+					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp&nbspSave
+				</button>
+				<button type="button" value="Cancel" class="btn btn-danger" onclick="location.href='/page/view/<?php echo $id; ?>'">
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp&nbspCancel
+				</button>
+			</form>
 		</div>
 		<footer class="footer">
 			<div class="container">

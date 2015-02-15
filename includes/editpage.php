@@ -12,15 +12,11 @@ $error_msg = "";
 
 
  
-if (isset($_POST['title'], $_POST['owner'], $_POST['g-recaptcha-response'])) {
+if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha-response'])) {
     // Sanitize and validate the data passed in
-    $owner = filter_input(INPUT_POST, 'owner', FILTER_SANITIZE_STRING);
- 
     $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-
-    $randNumber = randomNumber(16);
-    $id = alphaID($randNumber);
-
+    $contents = filter_input(INPUT_POST, 'contents', FILTER_SANITIZE_STRING);
+    $id = $_POST['id'];
     
     if (isset($_POST['private'])) {
       if ($_POST['private'] == "1") {
@@ -73,16 +69,17 @@ if (isset($_POST['title'], $_POST['owner'], $_POST['g-recaptcha-response'])) {
     if (empty($error_msg)) {
  
         // Insert the new page into the database 
-        if ($insert_stmt = $mysqli->prepare("INSERT INTO pages (id, title, owner, private) VALUES (?, ?, ?, ?)")) {
-            $insert_stmt->bind_param('sssi', $id, $title, $owner, $private);
+        if ($insert_stmt = $mysqli->prepare("UPDATE pages SET title = ?, private = ? WHERE id = ?")) {
+            $insert_stmt->bind_param('sis', $title, $private, $id);
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
                 header('Location: ../errors/error.php?err=creation failure: INSERT');
             }
         }
         // Create the blank page file
-        $newpage = fopen("../page_files/".$id.".txt", "w");
-        fclose($newpage);
-        header('Location: ../page/edit/'.$id.'');
+        $pagefile = fopen("../page_files/".$id.".txt", "w");
+        fwrite($pagefile, $contents);
+        fclose($pagefile);
+        header('Location: ../page/view/', $id);
     }
 }

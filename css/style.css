@@ -47,3 +47,6 @@ a:active {
 .centered{
     margin: 0 auto;
 }
+.page-title {
+  color: #888;
+}
