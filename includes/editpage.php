@@ -15,6 +15,7 @@ if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha
     $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
     $contents = filter_input(INPUT_POST, 'contents', FILTER_SANITIZE_STRING);
     $id = $_POST['id'];
+    $lastedit = time();
     
     if (isset($_POST['private'])) {
       if ($_POST['private'] == "1") {
@@ -67,8 +68,8 @@ if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha
     if (empty($error_msg)) {
  
         // Insert the new page into the database 
-        if ($insert_stmt = $mysqli->prepare("UPDATE pages SET title = ?, private = ? WHERE id = ?")) {
-            $insert_stmt->bind_param('sis', $title, $private, $id);
+        if ($insert_stmt = $mysqli->prepare("UPDATE pages SET title = ?, private = ?, lastedit = ?, WHERE id = ?")) {
+            $insert_stmt->bind_param('siis', $title, $private, $lastedit, $id);
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
                 header('Location: ../errors/error.php?err=creation failure: INSERT');

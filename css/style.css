@@ -50,3 +50,9 @@ a:active {
 .page-title {
   color: #888;
 }
+.box-thing a:link {
+  color: #fff;
+}
+.box-thing a:visited {
+  color: #fff;
+}

@@ -52,6 +52,7 @@ $prep_stmt = "SELECT id FROM pages WHERE owner = ?";
 		<link href="../css/index.css" rel="stylesheet">
 		<link href="../css/user.css" rel="stylesheet">
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script> 
+    <script src="../js/isotope.min.js"></script> 
 	</head>
 	<body>
 
@@ -83,8 +84,54 @@ $prep_stmt = "SELECT id FROM pages WHERE owner = ?";
 
 		<div class="container">
 			<div class="centered text-center">
-				<h1>Hi, <?php echo htmlentities($_SESSION['username']) ?>!</h1><h2><?php if ($num_pages == 0) {echo "You haven't written any pages! Why not <a href='../page/new'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Make one?</a>";} else {echo "You've written <span class='label label-warning'>".$num_pages." pages</span> so far.";} ?>
+				<h1>Hi, <?php echo htmlentities($_SESSION['username']) ?>!</h1><h2><?php if ($num_pages == 0) {echo "You haven't written any pages! Why not <a href='../page/new'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Make one?</a>";} else {echo "You've written <span class='label label-success'>".$num_pages." pages</span> so far.";} ?>
 			</div>
+
+<h2 style="display:inline-block">Filter</h2>
+<div id="filters" class="button-group">  <button class="btn btn-info" data-filter="*">show all</button>
+  <button class="btn btn-primary" data-filter="onlyPublic">only public</button>
+  <button class="btn btn-primary" data-filter="onlyPrivate">only private</button>
+</div>
+
+<h2 style="display:inline-block">Sort</h2>
+<div id="sorts" class="button-group">  <button class="btn btn-info" data-sort-by="original-order">original order</button>
+  <button class="btn btn-primary" data-sort-by="title">title</button>
+  <button class="btn btn-primary" data-sort-by="recent">recent</button>
+  <button class="btn btn-primary" data-sort-by="id">ID</button>
+  <button class="btn btn-primary" data-sort-by="privacy">privacy</button>
+</div>
+<br />
+
+<?php
+        $fetch = "SELECT id, title, owner, private, lastedit FROM pages";
+        $result = $mysqli->query($fetch)or die(mysql_error());
+
+        echo "<div class='isotope'>";
+
+        while($row = mysqli_fetch_array($result))
+          if ($row['owner'] == htmlentities($_SESSION['username'])) {
+        {
+          echo "<div class='page-info'>";
+          echo "<div class='container' style='width:110%'>";
+          echo "<div class='thumbnail'>";
+          echo "<div class='caption'>";
+          echo "<h3 class='title'>". $row['title'] ."</h3>";
+          echo "<p class='recent' style='display:none'>". $row['lastedit'] ."</p>";
+          echo "<div class='box-thing'><p><a style='a:link{color:#fff;}' href='/page/edit/". $row['id'] ."' class='btn btn-primary' role='button'>Edit</a> <a href='/page/view/". $row['id'] ."' class='btn btn-info' role='button'>View</a></p></div>";
+          if ($row['private'] == 0) {echo "<p class='privacy' style='display:none'>0</p><small>last edit: ". date('m/d/Y', $row['lastedit']) ." &mdash; <span class='label label-primary'>Public</span></small>";} else {echo "<p class='privacy' style='display:none'>1</p><small>last edit: ". date('m/d/Y', $row['lastedit']) ." &mdash; <span class='label label-warning'>Private</span></small>";}
+          echo "</div>";
+          echo "</div>";
+          echo "</div>";
+          echo "</div>";
+        }
+      }
+
+      echo "</div>";
+
+      ?>
+<script src="../js/isotope.min.js"></script> 
+<script src="../js/page_sort_user.js"></script> 
+
 		</div>
 		<footer class="footer">
 			<div class="container">
