@@ -1,7 +1,7 @@
 # writely
 ## todo list
 - [ ] User
-  - [ ] Personal Page
+  - [x] Personal Page
   - [ ] User Search
   - [ ] Customization
     - [ ] Custom CSS
@@ -13,9 +13,10 @@
   - [x] Creation
   - [ ] Deletion
   - [x] Page IDs
-  - [ ] Editing
+  - [x] Editing
   - [ ] Commenting?
   - [x] Privacy Settings
+  - [x] Sorting
 - [ ] Administration
   - [ ] Dashboard
   - [ ] User Deletion

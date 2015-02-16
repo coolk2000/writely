@@ -19,24 +19,6 @@ if (! $id) {
     header('Location: /index');
 }
 
-$prep_stmt = "SELECT id FROM pages WHERE id = ? LIMIT 1";
-    $stmt = $mysqli->prepare($prep_stmt);
- 
-    if ($stmt) {
-        $stmt->bind_param('s', $id);
-        $stmt->execute();
-        $stmt->store_result();
- 
-                if ($stmt->num_rows == 0) {
-                        // A user with this username already exists
-                        header('Location: /index');
-                        $stmt->close();
-                }
-        } else {
-                $error_msg .= '<p class="error">Database error line 55</p>';
-                $stmt->close();
-        }
-
 $stmt = $mysqli->prepare("SELECT title, owner, private FROM pages WHERE id = ?");
 $stmt->bind_param("s", $id);
 $stmt->execute();

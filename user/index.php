@@ -97,7 +97,6 @@ $prep_stmt = "SELECT id FROM pages WHERE owner = ?";
 <div id="sorts" class="button-group">  <button class="btn btn-info" data-sort-by="original-order">original order</button>
   <button class="btn btn-primary" data-sort-by="title">title</button>
   <button class="btn btn-primary" data-sort-by="recent">recent</button>
-  <button class="btn btn-primary" data-sort-by="id">ID</button>
   <button class="btn btn-primary" data-sort-by="privacy">privacy</button>
 </div>
 <br />

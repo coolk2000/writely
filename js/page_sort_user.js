@@ -4,8 +4,12 @@
     getSortData: {
       title: '.title',
       recent: '.recent parseInt',
-      id: '.id',
       privacy: '.privacy parseInt',
+    },
+    sortAscending: {
+        title: true,
+        recent: false,
+        privacy: false,
     }
   });
 
