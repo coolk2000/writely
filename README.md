@@ -6,7 +6,6 @@
   - [ ] Customization
     - [ ] Custom CSS
     - [ ] Simpler Custom Page
-  - [ ] Home
   - [x] Registration
   - [x] Login
 - [ ] Pages
@@ -18,8 +17,8 @@
   - [x] Privacy Settings
   - [x] Sorting
 - [ ] Administration
-  - [ ] Dashboard
+  - [x] Dashboard
   - [ ] User Deletion
   - [ ] User Creation
   - [ ] User Editing
-  - [ ] See All Pages
+  - [x] See All Pages
