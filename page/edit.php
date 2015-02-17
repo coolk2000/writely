@@ -111,14 +111,13 @@ fclose($open);
 			<form class="form-register" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" method="post" name="edit_page">
 				<div class="input-group">
 				<span class="input-group-addon">Page Title</span>
-				<input type="text" name="title" class="form-control" id="title" placeholder="<?php echo $sentence ?>" aria-label="Page Title">
+				<input type="text" name="title" class="form-control" id="title" placeholder="<?php echo $sentence ?>" value="<?php echo $title; ?>" aria-label="Page Title">
 				<span class="input-group-addon">(Max 140 Characters)</span>
 			</div>
 			<div class="input-group" style="display:none">
 					<input type="text" name="id" class="form-control" id="id" value="<?php echo $id; ?>" aria-label="Page ID">
 				</div>
 			<br />
-				<script type="text/javascript">var titledata = <?php echo json_encode($title); ?>; document.getElementById("title").value = titledata;</script>
 				<textarea type="text" rows="15" name="contents" class="form-control" id="contents" placeholder="<?php echo $sentence ?>" aria-label="Page Contents"></textarea>
 				<script type="text/javascript">var textdata = <?php echo json_encode($data); ?>; document.getElementById("contents").value = textdata;</script>
 				<br />
@@ -135,21 +134,27 @@ fclose($open);
 					?>
 				</div>
 				<br />
-				<div class="g-recaptcha" data-sitekey="6LePBwITAAAAALUD9aBgm2UnPghov9wXQqCU4Ycq"></div>
-				<br />
-				<button type="button" value="Save" class="btn btn-success" onclick="form.submit();">
+				<button type="submit" value="Save" class="btn btn-success" onclick="return confirm('Are you sure you want to save this page?');">
 					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp&nbspSave
 				</button>
 				<button type="button" value="Cancel" class="btn btn-danger" onclick="location.href='/page/view/<?php echo $id; ?>'">
 					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp&nbspCancel
 				</button>
+				<script src="bootbox.min.js"></script>
+    			<script>
+       	 			$(document).on("click", ".btn-success", function(e) {
+            			bootbox.alert("Hello world!", function() {
+                			console.log("Alert Callback");
+            			});
+        			});
+    </script>
 			</form>
 		</div>
 		<footer class="footer">
 			<div class="container">
 				<div class="text-muted">
 					<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
-					2015 Jake Koenen | <script type="text/javascript" src="/modules/footquote/random.php?type=1"></script> <span style="float:right"><a href="/help#formatting"><span class="glyphicon glyphicon-question-sign"></span> What's Markdown?</a></span>
+					2015 Jake Koenen | <script type="text/javascript" src="/modules/footquote/random.php?type=1"></script> <span style="float:right"><a href="/help#markdown"><span class="glyphicon glyphicon-question-sign"></span> What's Markdown?</a></span>
 				</div>
 			</div>
 		</footer>

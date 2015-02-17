@@ -1,19 +1,13 @@
 <?php
 include_once 'db_connect.php';
 include_once 'db_config.php';
-require_once 'recaptchalib.php';
 include 'id_gen.php';
-
-$secret = "6LePBwITAAAAAP8-Zvg3fOODI217MLcWaHs7mZEt";
-$response = null;
-$reCaptcha = new ReCaptcha($secret);
 
 $error_msg = "";
  
-if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha-response'])) {
+if (isset($_POST['title'], $_POST['id'])) {
     // Sanitize and validate the data passed in
     $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-    $contents = filter_input(INPUT_POST, 'contents', FILTER_SANITIZE_STRING);
     $id = $_POST['id'];
     $lastedit = time();
     
@@ -25,15 +19,10 @@ if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha
         $private = '0';
     }
 
-    if ($_POST["g-recaptcha-response"]) {
-        $response = $reCaptcha->verifyResponse(
-            $_SERVER["REMOTE_ADDR"],
-            $_POST["g-recaptcha-response"]
-        );
-    }
-
-    if (!($response != null && $response->success)) {
-        $error_msg .= '<p class="error">Incorrect captcha.</p>';
+    if (isset($_POST['contents'])) {
+        $contents = filter_input(INPUT_POST, 'contents', FILTER_SANITIZE_STRING);
+    } else {
+        $contents = "";
     }
  
     // Username validity and password validity have been checked client side.
@@ -68,7 +57,7 @@ if (isset($_POST['title'], $_POST['id'], $_POST['contents'], $_POST['g-recaptcha
     if (empty($error_msg)) {
  
         // Insert the new page into the database 
-        if ($insert_stmt = $mysqli->prepare("UPDATE pages SET title = ?, private = ?, lastedit = ?, WHERE id = ?")) {
+        if ($insert_stmt = $mysqli->prepare("UPDATE pages SET title = ?, private = ?, lastedit = ? WHERE id = ?")) {
             $insert_stmt->bind_param('siis', $title, $private, $lastedit, $id);
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
