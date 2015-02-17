@@ -13,7 +13,6 @@
   - [ ] Deletion
   - [x] Page IDs
   - [x] Editing
-  - [ ] Commenting?
   - [x] Privacy Settings
   - [x] Sorting
 - [ ] Administration
@@ -22,3 +21,7 @@
   - [ ] User Creation
   - [ ] User Editing
   - [x] See All Pages
+- [ ] Social
+  - [ ] Private Messaging
+  - [ ] Page Commenting
+  - [ ] Likes/Dislikes
