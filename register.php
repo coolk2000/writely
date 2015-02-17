@@ -29,6 +29,7 @@ if (! $msg) {
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <link href="css/footer.css" rel="stylesheet">
         <link href="css/register.css" rel="stylesheet">
+        <link href="css/help.css" rel="stylesheet">
         <script src='https://www.google.com/recaptcha/api.js'></script>
         <script src="modules/jquery/jquery-2.1.3.min.js"></script>
         <script> 
@@ -57,7 +58,7 @@ if (! $msg) {
 				<div class="jumbotron">
 					<h1>register</h1>
 					<h3 class="errortext"><?php echo str_replace("_", " ", $msg); ?></h3>
-					<form class="form-register" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" method="post" name="registration_form">
+					<form class="form-register" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" method="post" name="registration_form" id="registration-form">
 						<div class="form-group">
 							<label class="sr-only" for="username">Username</label>
 							<input type="username" name="username" class="form-control" id="username" placeholder="Username">
@@ -65,7 +66,9 @@ if (! $msg) {
 							<input type="password" name="password" class="form-control" id="password" placeholder="Password">
                             <label class="sr-only" for="inputPassword">Confirm Password</label>
                             <input type="password" name="confirmpwd" class="form-control" id="confirmpwd" placeholder="Password Again">
-                            <br />
+                            <div class="bs-callout bs-callout-danger">
+                            	<h4>Passwords don't match</h4>
+							</div>
                         </div>
                         <div class="g-recaptcha" data-sitekey="6LePBwITAAAAALUD9aBgm2UnPghov9wXQqCU4Ycq"></div>
                         <br />
