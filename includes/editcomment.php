@@ -5,25 +5,11 @@ include 'id_gen.php';
 
 $error_msg = "";
  
-if (isset($_POST['title'], $_POST['id'])) {
+if (isset($_POST['content'], $_POST['id'])) {
     // Sanitize and validate the data passed in
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-    $id = $_POST['id'];
+    $content = nl2br($_POST['content']);
     $lastedit = time();
-    
-    if (isset($_POST['private'])) {
-      if ($_POST['private'] == "1") {
-        $private = '1';
-        }
-    } else {
-        $private = '0';
-    }
-
-    if (isset($_POST['contents'])) {
-        $contents = filter_input(INPUT_POST, 'contents', FILTER_SANITIZE_STRING);
-    } else {
-        $contents = "";
-    }
+    $id = $_POST['id'];
  
     // Username validity and password validity have been checked client side.
     // This should should be adequate as nobody gains any advantage from
@@ -57,17 +43,12 @@ if (isset($_POST['title'], $_POST['id'])) {
     if (empty($error_msg)) {
  
         // Insert the new page into the database 
-        if ($insert_stmt = $mysqli->prepare("UPDATE pages SET title = ?, private = ?, lastedit = ? WHERE id = ?")) {
-            $insert_stmt->bind_param('siis', $title, $private, $lastedit, $id);
+        if ($insert_stmt = $mysqli->prepare("UPDATE comments SET content = ?, lastedit = ? WHERE id = ?")) {
+            $insert_stmt->bind_param('sii', $content, $lastedit, $id);
             // Execute the prepared query.
             if (! $insert_stmt->execute()) {
                 header('Location: ../errors/error.php?err=creation failure: INSERT');
             }
         }
-        // Create the blank page file
-        $pagefile = fopen("../page_files/".$id.".txt", "w");
-        fwrite($pagefile, $contents);
-        fclose($pagefile);
-        header('Location: /page/view/'.$id.'');
     }
 }

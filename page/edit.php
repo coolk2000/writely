@@ -40,6 +40,7 @@ $stmt->bind_param("s", $id);
 $stmt->execute();
 $stmt->bind_result($title, $owner, $private);
 $stmt->fetch();
+$stmt->close();
 
 if (!(htmlentities($_SESSION['username']) == $owner || htmlentities($_SESSION['isAdmin']) == 1)) {
 	header('Location: /index');
@@ -108,7 +109,7 @@ fclose($open);
 				<h3 style="display:inline"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editing <span class="page-title">"<?php echo $title; ?>"</span></h3><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-danger">Edit</span>
 			</div>
 			<hr style="margin-top:8px"/>
-			<form class="form-register" action="<?php echo esc_url($_SERVER['PHP_SELF']); ?>" method="post" name="edit_page">
+			<form class="form-register" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" method="post" name="edit_page">
 				<div class="input-group">
 				<span class="input-group-addon">Page Title</span>
 				<input type="text" name="title" class="form-control" id="title" placeholder="<?php echo $sentence ?>" value="<?php echo $title; ?>" aria-label="Page Title">
@@ -134,20 +135,12 @@ fclose($open);
 					?>
 				</div>
 				<br />
-				<button type="submit" value="Save" class="btn btn-success" onclick="return confirm('Are you sure you want to save this page?');">
+				<button type="submit" value="Save" class="btn btn-success" onclick="form.submit();">
 					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp&nbspSave
 				</button>
 				<button type="button" value="Cancel" class="btn btn-danger" onclick="location.href='/page/view/<?php echo $id; ?>'">
 					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp&nbspCancel
 				</button>
-				<script src="bootbox.min.js"></script>
-    			<script>
-       	 			$(document).on("click", ".btn-success", function(e) {
-            			bootbox.alert("Hello world!", function() {
-                			console.log("Alert Callback");
-            			});
-        			});
-    </script>
 			</form>
 		</div>
 		<footer class="footer">

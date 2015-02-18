@@ -2,8 +2,8 @@
 include_once '../includes/db_connect.php';
 include_once '../includes/db_functions.php';
 include '../includes/id_gen.php';
-include '../modules/parsedown/Parsedown.php';
-$parsedown = new Parsedown();
+include '../vendor/autoload.php';
+$parsedown = new ParsedownExtra();
  
 sec_session_start();
  
@@ -24,6 +24,13 @@ $stmt->bind_param("s", $id);
 $stmt->execute();
 $stmt->bind_result($title, $owner, $private);
 $stmt->fetch();
+$stmt->close();
+
+if ($private == '1') {
+	if (! (htmlentities($_SESSION['username']) == $owner || htmlentities($_SESSION['isAdmin']) == '1')) {
+		header('Location: /index');
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +47,7 @@ if (login_check($mysqli) == true) {
 	}
 ?>
 	<head>
-		<title>writely; <?php echo htmlentities($_SESSION['username']) ?></title>
+		<title>writely; view page</title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,6 +104,29 @@ if (login_check($mysqli) == true) {
 				fclose($open);
 				?>
 			</div>
+
+		<?php
+        $fetch = "SELECT submitter, content, lastedit FROM comments WHERE pageid = ?";
+        $result = $mysqli->query($fetch)or die(mysql_error());
+
+        echo "<hr />";
+
+        while($row = mysqli_fetch_array($result)) {
+          if ($row['pageid'] == $id) {
+
+          echo "<br>";
+          echo "<div class='panel panel-default' style='width:40%'>";
+          echo "<div class='panel-body'>";
+          echo $parsedown->text($row['content']);
+          echo "</div>";
+          echo "<div class='panel-footer'>";
+          echo "&mdash; ". $row['submitter'] ."";
+          echo "</div>";
+          echo "</div>";
+      }
+      }
+      ?>
+
 		</div>
 		<footer class="footer">
 			<div class="container">
