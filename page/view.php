@@ -99,7 +99,7 @@ if ($logged == 'in') {
 				$file = '../page_files/'.$id.'.txt';
 				$open = fopen($file, 'r');
 				if (filesize($file) == 0) {
-					echo '<div class="centered text-center"><div class="jumbotron"><h2 style="color:#e5e5e5"><script type="text/javascript" src="/modules/emptypage/random.php?type=1"></script></h2></div></div>';
+					echo '<center><h2 style="color:#e5e5e5"><script type="text/javascript" src="/modules/emptypage/random.php?type=1"></script></h2></center>';
 				} else {
 					$data = fread($open,filesize($file));
 					echo $parsedown->text($data);

@@ -1,3 +1,23 @@
+<?php
+include_once '../includes/db_connect.php';
+include_once '../includes/db_functions.php';
+include '../vendor/autoload.php';
+$parsedown = new ParsedownExtra();
+error_reporting(0);
+
+$timezoneDetector = new Dater\TimezoneDetector();
+echo '<html><head>' . $timezoneDetector->getHtmlJsCode() .'</head></html>';
+date_default_timezone_set($timezoneDetector->getClientTimezone());
+
+sec_session_start();
+ 
+if (login_check($db) == true) {
+  $logged = 'in';
+} else {
+  $logged = 'out';
+}
+?>
+
 <html lang="en">
 	<head>
 		<title>writely; meta</title>
@@ -29,7 +49,7 @@
         <a class="navbar-brand" href="#">writely</a>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+            <li><a href="/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;Home</a></li>
             <li class="active"><a href="#"><span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>&nbsp;Meta</a></li>
             <li><a href="/meta/help"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&nbsp;Help</a></li>
           </ul>
@@ -46,12 +66,26 @@
       <div class="progress">
         <div class="progress-bar progress-bar-primary progress-bar-striped" style="width:25%">
         </div>
-        <div class="progress-bar progress-bar-danger progress-bar-striped" style="width:7%">
+        <div class="progress-bar progress-bar-danger progress-bar-striped" style="width:75%">
         </div>
       </div>
-      <p style="color:#818181;margin-top:-15px">BLUE = Currently functioning | RED = Planned changes | YELLOW = In-progress | GREEN = Finished changes</p>
       <hr />
-      <h2 style="display:inline">Progress</h2>
+      <h2 style="margin-top:-12px">Notices and Progression</h2><?php if (htmlentities($_SESSION['isAdmin']) == '1') {echo "<button type='button' value='New' class='btn btn-info' style='margin-top:-42px;float:right' onclick='location.href=\"/meta/newpost\"'><span class='glyphicon glyphicon-plus' aria-hidden='true'></span>&nbsp&nbspNew</button>";} ?>
+      <br />
+      <?php
+      $fetch = $db->query("SELECT author, title, content, lastedit, class FROM metaposts");
+      while($row = $fetch->fetch(PDO::FETCH_ASSOC)) {
+
+        echo "<div class='panel panel-". $row['class'] ."' style='width:50%'>";
+        echo "<div class='panel-heading'>";
+        echo "<h3 class='panel-title'>". $row['title'] ."</h3><small>". date('m/d/Y g:i a', $row['lastedit']) ."</small>";
+        echo "</div>";
+        echo "<div class='panel-body'>";
+        echo $row['content'];
+        echo "</div>";
+        echo "</div>";
+      }
+    ?>
 
 		</div>
 		<footer class="footer">

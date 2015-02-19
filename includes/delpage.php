@@ -15,8 +15,9 @@ if (isset($_POST['id'])) {
 				header('Location: /error=deletion failure: DELETE');
 			}
 		}
-		// Create the blank page file
-		unlink('/page_files/'.$id.'.txt');
+		$file = fopen('../page_files/'.$id.'.txt', 'a');
+		fclose($file);
+		unlink('../page_files/'.$id.'.txt');
 		$db = null;
 		header('Location: /index');
 	}
