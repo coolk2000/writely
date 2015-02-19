@@ -5,7 +5,7 @@ include '../modules/inspiration.php';
  
 sec_session_start();
  
-if (login_check($mysqli) == true) {
+if (login_check($db) == true) {
     $logged = 'in';
 } else {
     $logged = 'out';
@@ -18,7 +18,7 @@ if (! $id) {
 }
 
 $prep_stmt = "SELECT id FROM pages WHERE id = ? LIMIT 1";
-    $stmt = $mysqli->prepare($prep_stmt);
+    $stmt = $db->prepare($prep_stmt);
  
     if ($stmt) {
         $stmt->bind_param('s', $id);
@@ -35,7 +35,7 @@ $prep_stmt = "SELECT id FROM pages WHERE id = ? LIMIT 1";
                 $stmt->close();
         }
 
-$stmt = $mysqli->prepare("SELECT title, owner, private FROM pages WHERE id = ?");
+$stmt = $db->prepare("SELECT title, owner, private FROM pages WHERE id = ?");
 $stmt->bind_param("s", $id);
 $stmt->execute();
 $stmt->bind_result($title, $owner, $private);

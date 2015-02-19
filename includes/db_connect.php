@@ -1,3 +1,3 @@
 <?php
-include_once 'db_config.php';   // As functions.php is not included
-$mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE);
+$db = new PDO('mysql:host=localhost;dbname=writely;charset=utf8', 'writely', 'Z5wnZ2YaczYdMTP4');
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

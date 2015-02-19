@@ -1,21 +1,18 @@
 <?php
 include_once 'db_connect.php';
 include_once 'db_functions.php';
- 
-sec_session_start(); // Our custom secure way of starting a PHP session.
- 
+
+sec_session_start();
+
 if (isset($_POST['username'], $_POST['p'])) {
 	$username = $_POST['username'];
-	$password = $_POST['p']; // The hashed password.
- 
-	if (login($username, $password, $mysqli) == true) {
-		// Login success 
+	$password = $_POST['p'];
+
+	if (login($username, $password, $db) == true) {
 		header('Location: ../index');
 	} else {
-		// Login failed 
 		header('Location: ../login?msg=Sorry,_what_you_typed_below_was_wrong.');
 	}
 } else {
-	// The correct POST variables were not sent to this page. 
-	echo 'Invalid Request';
+	header('Location: /error=creation failure: INSERT');
 }

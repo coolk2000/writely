@@ -4,42 +4,38 @@ include_once '../includes/db_functions.php';
  
 sec_session_start();
  
-if (login_check($mysqli) == true) {
-    $logged = 'in';
+if (login_check($db) == true) {
+	$logged = 'in';
 } else {
-    $logged = 'out';
+	$logged = 'out';
 }
 ?>
 
 <!DOCTYPE html>
 <?php if ($logged === 'out') {
-        	header('Location: ../index?msg=not_logged_in!');
-        }
-        ?>
+			header('Location: ../index?msg=not_logged_in!');
+		}
+		?>
 <html lang="en">
 <?php
-if (login_check($mysqli) == true) {
-    ?>
-    	<style type="text/css">#nav{display:none;}</style>
-    <?php
+if (login_check($db) == true) {
+	?>
+		<style type="text/css">#nav{display:none;}</style>
+	<?php
 	} else {
 	?>
 		<style type="text/css">#nav_2{display:none;}</style>
 	<?php
 	}
 
-$prep_stmt = "SELECT id FROM pages WHERE owner = ?";
-    $stmt = $mysqli->prepare($prep_stmt);
+$stmt = $db->prepare("SELECT id FROM pages WHERE owner = ?");
+$stmt_ready = true;
  
-    if ($stmt) {
-    	$stmt->bind_param('s', htmlentities($_SESSION['username']));
-        $stmt->execute();
-        $stmt->store_result();
-        
-        $num_pages = $stmt->num_rows;
-        
-        $stmt->close();
-        }
+	if ($stmt_ready == true) {
+		$stmt->execute(array(htmlentities($_SESSION['username'])));
+		
+		$num_pages = $stmt->rowCount();
+		}
 ?>
 	<head>
 		<title>writely; <?php echo htmlentities($_SESSION['username']) ?></title>
@@ -52,35 +48,35 @@ $prep_stmt = "SELECT id FROM pages WHERE owner = ?";
 		<link href="../css/index.css" rel="stylesheet">
 		<link href="../css/user.css" rel="stylesheet">
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script> 
-    <script src="../js/isotope.min.js"></script> 
+	<script src="../js/isotope.min.js"></script> 
 	</head>
 	<body>
 
 		<nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
-        <a class="navbar-brand" href="#">writely</a>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
-            <?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li><a href=\"../admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
-            <li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-          	<li><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
-          	<li><a href="settings"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
-          	<p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?><?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "&nbsp<span class=\"label label-info\">Admin</span>";} ?></p>
+	  <div class="container">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		</div>
+		<a class="navbar-brand" href="#">writely</a>
+		<div id="navbar" class="collapse navbar-collapse">
+		  <ul class="nav navbar-nav">
+			<li class="active"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+			<?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "<li><a href=\"../admin/\"><span class=\"glyphicon glyphicon-dashboard\" aria-hidden=\"true\"></span>&nbspAdmin</a></li>";} ?>
+			<li><a href="../logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbspLogout</a></li>
 		  </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+		  <ul class="nav navbar-nav navbar-right">
+		  	<li><a href="../page/new"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></li>
+		  	<li><a href="settings"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
+		  	<p class="navbar-text navbar-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp<?php echo htmlentities($_SESSION['username']) ?><?php if (htmlentities($_SESSION['isAdmin']) == 1) {echo "&nbsp<span class=\"label label-info\">Admin</span>";} ?></p>
+		  </ul>
+		</div><!--/.nav-collapse -->
+	  </div>
+	</nav>
 
 		<div class="container">
 			<div class="centered text-center">
@@ -102,32 +98,32 @@ $prep_stmt = "SELECT id FROM pages WHERE owner = ?";
 <br />
 
 <?php
-        $fetch = "SELECT id, title, owner, private, lastedit FROM pages";
-        $result = $mysqli->query($fetch)or die(mysql_error());
+		echo "<div class='isotope'>";
 
-        echo "<div class='isotope'>";
+		$stmt = $db->query("SELECT id, title, owner, private, lastedit FROM pages");
 
-        while($row = mysqli_fetch_array($result))
-          if ($row['owner'] == htmlentities($_SESSION['username'])) {
-        {
-          echo "<div class='page-info'>";
-          echo "<div class='container' style='width:110%'>";
-          echo "<div class='thumbnail'>";
-          echo "<div class='caption'>";
-          echo "<h3 class='title'>". $row['title'] ."</h3>";
-          echo "<p class='recent' style='display:none'>". $row['lastedit'] ."</p>";
-          echo "<div class='box-thing'><p><a style='a:link{color:#fff;}' href='/page/edit/". $row['id'] ."' class='btn btn-primary' role='button'>Edit</a> <a href='/page/view/". $row['id'] ."' class='btn btn-info' role='button'>View</a></p></div>";
-          if ($row['private'] == 0) {echo "<p class='privacy' style='display:none'>0</p><small>last edit: <br>". date('m/d/Y @ g:i A', $row['lastedit']) ." &mdash; <span class='label label-primary'>Public</span></small>";} else {echo "<p class='privacy' style='display:none'>1</p><small>last edit: <br>". date('m/d/Y @ g:i A', $row['lastedit']) ." &mdash; <span class='label label-warning'>Private</span></small>";}
-          echo "</div>";
-          echo "</div>";
-          echo "</div>";
-          echo "</div>";
-        }
-      }
+		while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+		  if ($row['owner'] == htmlentities($_SESSION['username'])) {
+		  echo "<div class='page-info'>";
+		  echo "<div class='container' style='width:110%'>";
+		  echo "<div class='thumbnail'>";
+		  echo "<div class='caption'>";
+		  echo "<h3 class='title'>". $row['title'] ."</h3>";
+		  echo "<p class='recent' style='display:none'>". $row['lastedit'] ."</p>";
+		  echo "<div class='box-thing'><p><a style='a:link{color:#fff;}' href='/page/edit/". $row['id'] ."' class='btn btn-primary' role='button'>Edit</a> <a href='/page/view/". $row['id'] ."' class='btn btn-info' role='button'>View</a></p></div>";
+		  if ($row['private'] == 0) {echo "<p class='privacy' style='display:none'>0</p><small>last edit: <br>". date('m/d/Y @ g:i A', $row['lastedit']) ." &mdash; <span class='label label-primary'>Public</span></small>";} else {echo "<p class='privacy' style='display:none'>1</p><small>last edit: <br>". date('m/d/Y @ g:i A', $row['lastedit']) ." &mdash; <span class='label label-warning'>Private</span></small>";}
+		  echo "</div>";
+		  echo "</div>";
+		  echo "</div>";
+		  echo "</div>";
+		}
+	  }
 
-      echo "</div>";
+	  echo "</div>";
 
-      ?>
+	  $db = null;
+
+	  ?>
 <script src="../js/isotope.min.js"></script> 
 <script src="../js/page_sort_user.js"></script> 
 
@@ -141,6 +137,6 @@ $prep_stmt = "SELECT id FROM pages WHERE owner = ?";
 			</div>
 		</footer>
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>
-    	<script src="../modules/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../modules/bootstrap/js/bootstrap.min.js"></script>
 	</body>
 </html>
