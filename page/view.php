@@ -113,17 +113,18 @@ if ($logged == 'in') {
 		$fetch = $db->query("SELECT submitter, content, lastedit, pageid FROM comments");
 
 		echo "<hr />";
+		echo "<h3>Comments</h3>";
+
 
 		while($row = $fetch->fetch(PDO::FETCH_ASSOC)) {
 		  if ($row['pageid'] == $id) {
 
-		  echo "<br>";
 		  echo "<div class='panel panel-default' style='width:40%'>";
 		  echo "<div class='panel-body'>";
 		  echo $parsedown->text($row['content']);
 		  echo "</div>";
 		  echo "<div class='panel-footer'>";
-		 echo "&mdash; ". $row['submitter'] ."";
+		 echo "". $row['submitter'] ." | ". date('m/d/Y g:i a', $row['lastedit']) ."";
 		  echo "</div>";
 		  echo "</div>";
 	  }
