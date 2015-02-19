@@ -29,7 +29,7 @@
         <a class="navbar-brand" href="#">writely</a>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
+            <li><a href="/index"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbspHome</a></li>
             <li class="active"><a href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&nbspHelp</a></li>
           </ul>
 		  </ul>

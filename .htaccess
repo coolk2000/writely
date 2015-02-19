@@ -9,7 +9,7 @@ RewriteRule ^logout/?$ includes/logout.php [NC]
 RewriteRule ^page/new?$ page/new.php [NC]
 RewriteRule ^page/view/([^/.]+)?$ page/view.php?id=$1
 RewriteRule ^page/edit/([^/.]+)?$ page/edit.php?id=$1 [NC]
-RewriteRule ^help/?$ help.php [NC]
+RewriteRule ^meta/help/?$ meta/help.php [NC]
 
 ErrorDocument 400 /errors/400.html
 ErrorDocument 401 /errors/401.html
