@@ -115,7 +115,7 @@ $stmt_ready = true;
 		  echo "<div class='caption'>";
 		  echo "<h3 class='title'>". $row['title'] ."</h3>";
 		  echo "<p class='recent' style='display:none'>". $row['lastedit'] ."</p>";
-		  echo "<div class='box-thing'><p><a style='a:link{color:#fff;}' href='/page/edit/". $row['id'] ."' class='btn btn-primary' role='button'>Edit</a> <a href='/page/view/". $row['id'] ."' class='btn btn-info' role='button'>View</a></p></div>";
+		  echo "<div class='box-thing'><p><a style='a:link{color:#fff;}' href='/page/edit/". $row['id'] ."' class='btn btn-primary' role='button'>Edit</a> <a href='/page/view/". $row['id'] ."' class='btn btn-info' role='button'>View</a> <a style='a:link{color:#fff;}' href='/page/delete/". $row['id'] ."' class='btn btn-danger' role='button'>Delete</a></p></div>";
 		  if ($row['private'] == 0) {echo "<p class='privacy' style='display:none'>0</p><small>last edit: <br>". date('m/d/Y @ g:i A', $row['lastedit']) ." &mdash; <span class='label label-primary'>Public</span></small>";} else {echo "<p class='privacy' style='display:none'>1</p><small>last edit: <br>". date('m/d/Y @ g:i A', $row['lastedit']) ." &mdash; <span class='label label-warning'>Private</span></small>";}
 		  echo "</div>";
 		  echo "</div>";

@@ -8,9 +8,9 @@
     - [ ] Simpler Custom Page
   - [x] Registration
   - [x] Login
-- [ ] Pages
+- [x] Pages
   - [x] Creation
-  - [ ] Deletion
+  - [x] Deletion
   - [x] Page IDs
   - [x] Editing
   - [x] Privacy Settings
