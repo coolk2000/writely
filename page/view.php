@@ -26,7 +26,6 @@ if (! $id) {
 $stmt = $db->prepare("SELECT title, owner, private, lastedit FROM pages WHERE id = ?");
 $stmt->execute(array($id));
 $pageinfo = $stmt->fetch(PDO::FETCH_ASSOC);
-$db = null;
 
 if ($pageinfo['private'] == '1') {
 	if (! (htmlentities($_SESSION['username']) == $owner || htmlentities($_SESSION['isAdmin']) == '1')) {
@@ -110,26 +109,25 @@ if ($logged == 'in') {
 			</div>
 		</div>
 
-		<?php // TODO: comment system
-//		$fetch = "SELECT submitter, content, lastedit FROM comments WHERE pageid = ?";
-//		$result = $mysqli->query($fetch)or die(mysql_error());
-//
-//		echo "<hr />";
-//
-//		while($row = mysqli_fetch_array($result)) {
-//		  if ($row['pageid'] == $id) {
-//
-//		  echo "<br>";
-//		  echo "<div class='panel panel-default' style='width:40%'>";
-//		  echo "<div class='panel-body'>";
-//		  echo $parsedown->text($row['content']);
-//		  echo "</div>";
-//		  echo "<div class='panel-footer'>";
-//		 echo "&mdash; ". $row['submitter'] ."";
-//		  echo "</div>";
-//		  echo "</div>";
-//	  }
-//	  }
+		<?php
+		$fetch = $db->query("SELECT submitter, content, lastedit, pageid FROM comments");
+
+		echo "<hr />";
+
+		while($row = $fetch->fetch(PDO::FETCH_ASSOC)) {
+		  if ($row['pageid'] == $id) {
+
+		  echo "<br>";
+		  echo "<div class='panel panel-default' style='width:40%'>";
+		  echo "<div class='panel-body'>";
+		  echo $parsedown->text($row['content']);
+		  echo "</div>";
+		  echo "<div class='panel-footer'>";
+		 echo "&mdash; ". $row['submitter'] ."";
+		  echo "</div>";
+		  echo "</div>";
+	  }
+	  }
 	  ?>
 
 		</div>
