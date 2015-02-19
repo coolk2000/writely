@@ -9,6 +9,7 @@ RewriteRule ^logout/?$ includes/logout.php [NC]
 RewriteRule ^page/new?$ page/new.php [NC]
 RewriteRule ^page/view/([^/.]+)?$ page/view.php?id=$1
 RewriteRule ^page/edit/([^/.]+)?$ page/edit.php?id=$1 [NC]
+RewriteRule ^page/delete/([^/.]+)?$ page/delete.php?id=$1 [NC]
 RewriteRule ^meta/help/?$ meta/help.php [NC]
 RewriteRule ^meta/?$ meta/ [NC]
 

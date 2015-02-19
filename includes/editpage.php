@@ -27,7 +27,7 @@ if (isset($_POST['title'], $_POST['id'])) {
 	if (empty($error_msg)) {
 
 		if ($stmt = $db->prepare("UPDATE pages SET title = ?, private = ?, lastedit = ? WHERE id = ?")) {
-			if (! $db->execute(array($title, $private, $lastedit, $id))) {
+			if (! $stmt->execute(array($title, $private, $lastedit, $id))) {
 				header('Location: ../errors/error.php?err=creation failure: INSERT');
 			}
 		}
@@ -35,7 +35,7 @@ if (isset($_POST['title'], $_POST['id'])) {
 		$pagefile = fopen("../page_files/".$id.".txt", "w");
 		fwrite($pagefile, $contents);
 		fclose($pagefile);
-		$stmt->close();
+		$db = null;
 		header('Location: /page/view/'.$id.'');
 	}
 }
