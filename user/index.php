@@ -1,6 +1,11 @@
 <?php
 include_once '../includes/db_connect.php';
 include_once '../includes/db_functions.php';
+include '../vendor/autoload.php';
+
+$timezoneDetector = new Dater\TimezoneDetector();
+echo '<html><head>' . $timezoneDetector->getHtmlJsCode() .'</head></html>';
+date_default_timezone_set($timezoneDetector->getClientTimezone());
  
 sec_session_start();
  
@@ -132,7 +137,7 @@ $stmt_ready = true;
 			<div class="container">
 				<div class="text-muted">
 					<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
-					2015 Jake Koenen | <script type="text/javascript" src="../modules/footquote/random.php?type=1"></script> <span style="float:right"><a href="/help#markdown"><span class="glyphicon glyphicon-question-sign"></span> What's Markdown?</a></span>
+					2015 Jake Koenen | <script type="text/javascript" src="../modules/footquote/random.php?type=1"></script> <span style="float:right"><a href="/meta/help#markdown"><span class="glyphicon glyphicon-question-sign"></span> What's Markdown?</a></span>
 				</div>
 			</div>
 		</footer>
