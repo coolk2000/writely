@@ -14,7 +14,7 @@ if (! $msg) {
 <!DOCTYPE html>
 <html lang="en">
 <?php
-if (login_check($mysqli) == true) {
+if (login_check($db) == true) {
     ?>
     	<style type="text/css">#nav{display:none;}</style>
     <?php
@@ -24,7 +24,7 @@ if (login_check($mysqli) == true) {
 	<?php
 	}
 ?>
-<?php if (login_check($mysqli) == true) {
+<?php if (login_check($db) == true) {
         	header('Location: ./user/');
         }
         ?>

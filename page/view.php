@@ -7,7 +7,7 @@ $parsedown = new ParsedownExtra();
  
 sec_session_start();
  
-if (login_check($mysqli) == true) {
+if (login_check($db) == true) {
     $logged = 'in';
 } else {
     $logged = 'out';
@@ -19,14 +19,12 @@ if (! $id) {
     header('Location: /index');
 }
 
-$stmt = $mysqli->prepare("SELECT title, owner, private FROM pages WHERE id = ?");
-$stmt->bind_param("s", $id);
-$stmt->execute();
-$stmt->bind_result($title, $owner, $private);
-$stmt->fetch();
-$stmt->close();
+$stmt = $db->prepare("SELECT title, owner, private FROM pages WHERE id = ?");
+$stmt->execute(array($id));
+$pageinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+$db = null;
 
-if ($private == '1') {
+if ($pageinfo['private'] == '1') {
 	if (! (htmlentities($_SESSION['username']) == $owner || htmlentities($_SESSION['isAdmin']) == '1')) {
 		header('Location: /index');
 	}
@@ -36,7 +34,7 @@ if ($private == '1') {
 <!DOCTYPE html>
 <html lang="en">
 <?php
-if (login_check($mysqli) == true) {
+if ($logged == 'in') {
     ?>
     	<style type="text/css">#nav{display:none;}</style>
     <?php
@@ -88,7 +86,7 @@ if (login_check($mysqli) == true) {
     </nav>
 
 		<div class="container">
-				<h3 style="display:inline"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> <?php echo $title; ?></h3> <span class="page-title">&nbspBy <?php echo $owner; ?></span><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-info">View</span><?php if ($private == 1) {echo "&nbsp<span class=\"label label-warning\" title=\"Only you can view this page\">Private <span class=\"glyphicon glyphicon-question-sign\" aria-hidden=\"true\"></span>";} ?></h4>
+				<h3 style="display:inline"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> <?php echo $pageinfo['title']; ?></h3> <span class="page-title">&nbspBy <?php echo $pageinfo['owner']; ?></span><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-info">View</span><?php if ($pageinfo['private'] == 1) {echo "&nbsp<span class=\"label label-warning\" title=\"Only you can view this page\">Private <span class=\"glyphicon glyphicon-question-sign\" aria-hidden=\"true\"></span>";} ?></h4>
 			<hr style="margin-top:8px"/>
 			<div style="display:inline;">
 			<!-- <h4 style="margin-top:-14px;float:right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> By <?php echo $owner; ?></h4> -->
@@ -106,25 +104,25 @@ if (login_check($mysqli) == true) {
 			</div>
 
 		<?php
-        $fetch = "SELECT submitter, content, lastedit FROM comments WHERE pageid = ?";
-        $result = $mysqli->query($fetch)or die(mysql_error());
-
-        echo "<hr />";
-
-        while($row = mysqli_fetch_array($result)) {
-          if ($row['pageid'] == $id) {
-
-          echo "<br>";
-          echo "<div class='panel panel-default' style='width:40%'>";
-          echo "<div class='panel-body'>";
-          echo $parsedown->text($row['content']);
-          echo "</div>";
-          echo "<div class='panel-footer'>";
-          echo "&mdash; ". $row['submitter'] ."";
-          echo "</div>";
-          echo "</div>";
-      }
-      }
+//        $fetch = "SELECT submitter, content, lastedit FROM comments WHERE pageid = ?";
+//        $result = $mysqli->query($fetch)or die(mysql_error());
+//
+//        echo "<hr />";
+//
+//        while($row = mysqli_fetch_array($result)) {
+//          if ($row['pageid'] == $id) {
+//
+//          echo "<br>";
+//          echo "<div class='panel panel-default' style='width:40%'>";
+//          echo "<div class='panel-body'>";
+//          echo $parsedown->text($row['content']);
+//          echo "</div>";
+//          echo "<div class='panel-footer'>";
+//         echo "&mdash; ". $row['submitter'] ."";
+//          echo "</div>";
+//          echo "</div>";
+//      }
+//      }
       ?>
 
 		</div>

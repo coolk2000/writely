@@ -1,188 +1,142 @@
 <?php
+include_once 'db_connect.php';
 include_once 'db_config.php';
  
 function sec_session_start() {
-	$session_name = 'sec_session_id';   // Set a custom session name
+	$session_name = 'sec_session_id';
 	$secure = SECURE;
-	// This stops JavaScript being able to access the session id.
+
 	$httponly = true;
-	// Forces sessions to only use cookies.
+
 	if (ini_set('session.use_only_cookies', 1) === FALSE) {
-		header("Location: ../error.php?err=could not initiate a safe session (ini_set)");
+		header("Location: /error.php?err=could not initiate a safe session (ini_set)");
 		exit();
 	}
-	// Gets current cookies params.
+
 	$cookieParams = session_get_cookie_params();
 	session_set_cookie_params($cookieParams["lifetime"],
 		$cookieParams["path"], 
 		$cookieParams["domain"], 
 		$secure,
 		$httponly);
-	// Sets the session name to the one set above.
+
 	session_name($session_name);
-	session_start();			// Start the PHP session 
-	session_regenerate_id(true);	// regenerated the session, delete the old one. 
+	session_start();
+	session_regenerate_id(true);
 }
 
-function login($username, $password, $mysqli) {
-	// Using prepared statements means that SQL injection is not possible. 
-	if ($stmt = $mysqli->prepare("SELECT id, username, password, salt, admin 
-		FROM users
-	   WHERE username = ?
-		LIMIT 1")) {
-		$stmt->bind_param('s', $username);  // Bind "$username" to parameter.
-		$stmt->execute();	// Execute the prepared query.
-		$stmt->store_result();
- 
-		// get variables from result.
-		$stmt->bind_result($user_id, $username, $db_password, $salt, $admin);
-		$stmt->fetch();
- 
-		// hash the password with the unique salt.
-		$password = hash('sha512', $password . $salt);
-		if ($stmt->num_rows == 1) {
-			// If the user exists we check if the account is locked
-			// from too many login attempts 
- 
-			if (checkbrute($user_id, $mysqli) == true) {
-				// Account is locked 
-				// Send an email to user saying their account is locked
+function login($username, $password, $db) {
+	if ($stmt = $db->prepare("SELECT id, username, password, salt, admin FROM users WHERE username = ? LIMIT 1")) {
+		$stmt->execute(array($username));
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		$row_count = $stmt->rowCount();
+
+		$password = hash('sha512', $password . $row['salt']);
+		if ($row_count == 1) {
+			if (checkbrute($row['id'], $db) == true) {
+				// TODO: handle bruteforce attack / account lock
 				return false;
+				$db = null;
 			} else {
-				// Check if the password in the database matches
-				// the password the user submitted.
-				if ($db_password == $password) {
-					// Password is correct!
-					// Get the user-agent string of the user.
+				if ($row['password'] == $password) {
 					$user_browser = $_SERVER['HTTP_USER_AGENT'];
-					// XSS protection as we might print this value
-					$user_id = preg_replace("/[^0-9]+/", "", $user_id);
+					$user_id = preg_replace("/[^0-9]+/", "", $row['id']);
 					$_SESSION['user_id'] = $user_id;
-					// XSS protection as we might print this value
-					$username = preg_replace("/[^a-zA-Z0-9_\-]+/", 
-																"", 
-																$username);
-					$_SESSION['username'] = $username;
-					$_SESSION['isAdmin'] = $admin;
-					$_SESSION['login_string'] = hash('sha512', 
-							  $password . $user_browser);
-					// Login successful.
+					$username = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $row['username']);
+					$_SESSION['username'] = $row['username'];
+					$_SESSION['isAdmin'] = $row['admin'];
+					$_SESSION['login_string'] = hash('sha512', $password . $user_browser);
 					return true;
 				} else {
-					// Password is not correct
-					// We record this attempt in the database
+					// TODO: put in a place in /admin/ to see attempts
+					// TODO: get attempter's IP and put it in there too
 					$now = time();
-					$mysqli->query("INSERT INTO login_attempts(user_id, time)
-									VALUES ('$user_id', '$now')");
+					$stmt = $db->prepare("INSERT INTO login_attempts (user_id, time) VALUES (?, ?)");
+					$stmt->execute(array($row['id'], $now));
+					$db = null;
 					return false;
 				}
 			}
 		} else {
-			// No user exists.
 			return false;
 		}
 	}
+	$db = null;
 }
 
-function checkbrute($user_id, $mysqli) {
-	// Get timestamp of current time 
+function checkbrute($user_id, $db) {
 	$now = time();
- 
-	// All login attempts are counted from the past 2 hours. 
 	$valid_attempts = $now - (2 * 60 * 60);
- 
-	if ($stmt = $mysqli->prepare("SELECT time 
-							 FROM login_attempts 
-							 WHERE user_id = ? 
-							AND time > '$valid_attempts'")) {
-		$stmt->bind_param('i', $user_id);
- 
-		// Execute the prepared query. 
-		$stmt->execute();
-		$stmt->store_result();
- 
-		// If there have been more than 15 failed logins 
-		if ($stmt->num_rows > 15) {
+
+	if ($stmt = $db->prepare("SELECT time FROM login_attempts WHERE user_id = ? AND time > ?")) {
+		$stmt->execute(array($user_id, $valid_attempts));
+		$row_count = $stmt->rowCount();
+
+		if ($row_count >= 15) {
 			return true;
 		} else {
 			return false;
 		}
+		$db = null;
 	}
 }
 
-function login_check($mysqli) {
-	// Check if all session variables are set 
-	if (isset($_SESSION['user_id'], 
-						$_SESSION['username'], 
-						$_SESSION['isAdmin'],
-						$_SESSION['login_string'])) {
- 
+function login_check($db) {
+	if (isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['isAdmin'], $_SESSION['login_string'])) {
+
 		$user_id = $_SESSION['user_id'];
 		$login_string = $_SESSION['login_string'];
 		$username = $_SESSION['username'];
 		$admin = $_SESSION['isAdmin'];
- 
-		// Get the user-agent string of the user.
 		$user_browser = $_SERVER['HTTP_USER_AGENT'];
- 
-		if ($stmt = $mysqli->prepare("SELECT password 
-									  FROM users 
-									  WHERE id = ? LIMIT 1")) {
-			// Bind "$user_id" to parameter. 
-			$stmt->bind_param('i', $user_id);
-			$stmt->execute();   // Execute the prepared query.
-			$stmt->store_result();
- 
-			if ($stmt->num_rows == 1) {
-				// If the user exists get variables from result.
-				$stmt->bind_result($password);
-				$stmt->fetch();
+
+		if ($stmt = $db->prepare("SELECT password FROM users WHERE id = ? LIMIT 1")) {
+			$stmt->execute(array($user_id));
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$row_count = $stmt->rowCount();
+
+			if ($row_count == 1) {
+				$password = $row['password'];
 				$login_check = hash('sha512', $password . $user_browser);
- 
+
 				if ($login_check == $login_string) {
-					// Logged In 
 					return true;
 				} else {
-					// Not logged in 
 					return false;
 				}
 			} else {
-				// Not logged in 
 				return false;
 			}
 		} else {
-			// Not logged in 
 			return false;
 		}
 	} else {
-		// Not logged in 
 		return false;
 	}
 }
 
 function esc_url($url) {
- 
 	if ('' == $url) {
 		return $url;
 	}
- 
+
 	$url = preg_replace('|[^a-z0-9-~+_.?#=!&;,/:%@$\|*\'()\\x80-\\xff]|i', '', $url);
- 
+
 	$strip = array('%0d', '%0a', '%0D', '%0A');
 	$url = (string) $url;
- 
+
 	$count = 1;
 	while ($count) {
 		$url = str_replace($strip, '', $url, $count);
 	}
- 
+
 	$url = str_replace(';//', '://', $url);
- 
+
 	$url = htmlentities($url);
- 
+
 	$url = str_replace('&amp;', '&#038;', $url);
 	$url = str_replace("'", '&#039;', $url);
- 
+
 	if ($url[0] !== '/') {
 		// We're only interested in relative links from $_SERVER['PHP_SELF']
 		return '';
@@ -190,33 +144,3 @@ function esc_url($url) {
 		return $url;
 	}
 }
-
-/*function delpage($pageid) {
-	if ($page_deletion_query = $mysqli->prepare("DELETE FROM pages WHERE id = ?")) {
-            $page_deletion_query->bind_param('s', $pageid);
-            // Execute the prepared query.
-            if (! $page_deletion_query->execute()) {
-                header('Location: ../errors/error.php?err=deletion failure: DELETE');
-            }
-    }
-}
-
-function deluser($userid_1) {
-	if ($user_deletion_query = $mysqli->prepare("DELETE FROM users WHERE id = ?")) {
-            $user_deletion_query->bind_param('i', $userid_1);
-            // Execute the prepared query.
-            if (! $user_deletion_query->execute()) {
-                header('Location: ../errors/error.php?err=deletion failure: DELETE');
-            }
-    }
-}
-
-function makeadmin($userid_2) {
-	if ($makeadmin_query = $mysqli->prepare("UPDATE users SET admin = '1' WHERE id = ?")) {
-            $makeadmin_query->bind_param('i', $userid_2);
-            // Execute the prepared query.
-            if (! $makeadmin_query->execute()) {
-                header('Location: ../errors/error.php?err=change failure: UPDATE');
-            }
-        }
-}*/
