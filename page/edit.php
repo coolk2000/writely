@@ -16,33 +16,23 @@ $id = filter_input(INPUT_GET, 'id', $filter = FILTER_SANITIZE_STRING);
 if (! $id) {
     header('Location: /index');
 }
-
-$prep_stmt = "SELECT id FROM pages WHERE id = ? LIMIT 1";
-    $stmt = $db->prepare($prep_stmt);
+    if ($stmt = $db->prepare("SELECT id FROM pages WHERE id = ? LIMIT 1")) {
+        $stmt->execute(array($id));
+        $row_count = $stmt->rowCount();
  
-    if ($stmt) {
-        $stmt->bind_param('s', $id);
-        $stmt->execute();
-        $stmt->store_result();
- 
-                if ($stmt->num_rows == 0) {
+                if ($row_count == 0) {
                         // A user with this username already exists
                         header('Location: /index');
-                        $stmt->close();
                 }
         } else {
                 $error_msg .= '<p class="error">Database error line 55</p>';
-                $stmt->close();
         }
 
 $stmt = $db->prepare("SELECT title, owner, private FROM pages WHERE id = ?");
-$stmt->bind_param("s", $id);
-$stmt->execute();
-$stmt->bind_result($title, $owner, $private);
-$stmt->fetch();
-$stmt->close();
+$stmt->execute(array($id));
+$pageinfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!(htmlentities($_SESSION['username']) == $owner || htmlentities($_SESSION['isAdmin']) == 1)) {
+if (!(htmlentities($_SESSION['username']) == $pageinfo['owner'] || htmlentities($_SESSION['isAdmin']) == 1)) {
 	header('Location: /index');
 }
 
@@ -106,13 +96,13 @@ fclose($open);
 
 		<div class="container">
 			<div>
-				<h3 style="display:inline"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editing <span class="page-title">"<?php echo $title; ?>"</span></h3><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-danger">Edit</span>
+				<h3 style="display:inline"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editing <span class="page-title">"<?php echo $pageinfo['title']; ?>"</span></h3><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-danger">Edit</span>
 			</div>
 			<hr style="margin-top:8px"/>
 			<form class="form-register" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" method="post" name="edit_page">
 				<div class="input-group">
 				<span class="input-group-addon">Page Title</span>
-				<input type="text" name="title" class="form-control" id="title" placeholder="<?php echo $sentence ?>" value="<?php echo $title; ?>" aria-label="Page Title">
+				<input type="text" name="title" class="form-control" id="title" placeholder="<?php echo $sentence ?>" value="<?php echo $pageinfo['title']; ?>" aria-label="Page Title">
 				<span class="input-group-addon">(Max 140 Characters)</span>
 			</div>
 			<div class="input-group" style="display:none">
@@ -127,7 +117,7 @@ fclose($open);
 						<input type="checkbox" name="private" value="1" id="private">Make Private <span title="Making a page private means only you can view it."><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span></span>
 					</label>
 					<?php
-					if ($private == 1) {
+					if ($pageinfo['private'] == 1) {
 						echo '<script type="text/javascript">document.getElementById("private").checked = true;</script>';
 					} else {
 						echo '<script type="text/javascript">document.getElementById("private").checked = false;</script>';
@@ -147,7 +137,7 @@ fclose($open);
 			<div class="container">
 				<div class="text-muted">
 					<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
-					2015 Jake Koenen | <script type="text/javascript" src="/modules/footquote/random.php?type=1"></script> <span style="float:right"><a href="/help#markdown"><span class="glyphicon glyphicon-question-sign"></span> What's Markdown?</a></span>
+					2015 Jake Koenen | <script type="text/javascript" src="/modules/footquote/random.php?type=1"></script> <span style="float:right"><a href="/meta/help#markdown"><span class="glyphicon glyphicon-question-sign"></span> What's Markdown?</a></span>
 				</div>
 			</div>
 		</footer>

@@ -1,6 +1,7 @@
 {
     "require": {
         "erusev/parsedown-extra": "dev-master",
-        "erusev/parsedown": "1.5.1"
+        "erusev/parsedown": "1.5.1",
+        "dater/dater": "2.0.*@dev"
     }
 }

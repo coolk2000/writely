@@ -4,7 +4,7 @@ include_once '../includes/db_functions.php';
  
 sec_session_start();
 
-if (login_check($mysqli) == true) {
+if (login_check($db) == true) {
     $logged = 'in';
 } else {
     $logged = 'out';
@@ -73,15 +73,14 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 					}
 				$rows = $page * 10;
 				$prev = $page - 1;
-				$fetch = "SELECT id, title, owner, private FROM pages LIMIT $rows, 10";
-				$result = $mysqli->query($fetch)or die(mysql_error());
+				$fetch = $db->query("SELECT id, title, owner, private FROM pages LIMIT $rows, 10");
 
 				echo "<table class=\"table\">
 				<tr>
 				<th>ID</th><th>Title</th><th>Owner</th><th>isPrivate</th><th>Link to Page</th>
 				<tr>";
 
-				while($row = mysqli_fetch_array($result))
+				while($row = $fetch->fetch(PDO::FETCH_ASSOC))
 				{
 					echo "<tr>";
 					echo "<td>" . $row['id'] . "</td>";
@@ -95,6 +94,7 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 				if ($prev >= 0)
 				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.$prev.'">Previous</a></li>&nbsp';
 				echo '<li><a href="'.$_SERVER['PHP_SELF'].'?page='.($page+1).'">Next</a></li></ul>';
+				$db = null;
 			?>
 		</div>
 		<script src="../modules/jquery/jquery-2.1.3.min.js"></script>

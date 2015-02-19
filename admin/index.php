@@ -4,7 +4,7 @@ include_once '../includes/db_functions.php';
  
 sec_session_start();
 
-if (login_check($mysqli) == true) {
+if (login_check($db) == true) {
     $logged = 'in';
 } else {
     $logged = 'out';
@@ -16,28 +16,16 @@ if (htmlentities($_SESSION['isAdmin']) == 1) {
 	header('Location: ../errors/401.html');
 }
 
-$prep_stmt = "SELECT id FROM users";
-    $stmt = $mysqli->prepare($prep_stmt);
- 
-    if ($stmt) {
+    if ($stmt = $db->prepare("SELECT id FROM users")) {
         $stmt->execute();
-        $stmt->store_result();
-        
-        $num_users = $stmt->num_rows;
-        
-        $stmt->close();
+        $num_users = $stmt->rowCount();
         }
 
-$prep_stmt = "SELECT id FROM pages";
-    $stmt = $mysqli->prepare($prep_stmt);
+$stmt = "SELECT id FROM pages";
  
-    if ($stmt) {
+    if ($stmt = $db->prepare("SELECT id FROM pages")) {
         $stmt->execute();
-        $stmt->store_result();
-        
-        $num_pages = $stmt->num_rows;
-        
-        $stmt->close();
+        $num_pages = $stmt->rowCount();
         }
 ?>
 
