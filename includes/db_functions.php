@@ -36,7 +36,6 @@ function login($username, $password, $db) {
 			if (checkbrute($row['id'], $db) == true) {
 				// TODO: handle bruteforce attack / account lock
 				return false;
-				$db = null;
 			} else {
 				if ($row['password'] == $password) {
 					$user_browser = $_SERVER['HTTP_USER_AGENT'];
@@ -53,7 +52,6 @@ function login($username, $password, $db) {
 					$now = time();
 					$stmt = $db->prepare("INSERT INTO login_attempts (user_id, time) VALUES (?, ?)");
 					$stmt->execute(array($row['id'], $now));
-					$db = null;
 					return false;
 				}
 			}
@@ -61,7 +59,6 @@ function login($username, $password, $db) {
 			return false;
 		}
 	}
-	$db = null;
 }
 
 function checkbrute($user_id, $db) {
@@ -77,7 +74,6 @@ function checkbrute($user_id, $db) {
 		} else {
 			return false;
 		}
-		$db = null;
 	}
 }
 
@@ -142,5 +138,17 @@ function esc_url($url) {
 		return '';
 	} else {
 		return $url;
+	}
+}
+
+function checkAdmin($uid, $db) {
+	$stmt = $db->prepare("SELECT admin FROM users WHERE username = ?");
+	$stmt->execute(array($uid));
+	$userinfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if ($userinfo['admin'] == 1) {
+		return true;
+	} else {
+		return false;
 	}
 }

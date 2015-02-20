@@ -58,6 +58,8 @@ if ($logged == 'in') {
 		<link href="/css/index.css" rel="stylesheet">
 		<link href="/css/user.css" rel="stylesheet">
 		<script src="/modules/jquery/jquery-2.1.3.min.js"></script> 
+		<script src="/js/jquery-ui-1.11.3/jquery-ui.min.js"></script>
+		<script src="/modules/bootstrap/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 
@@ -91,7 +93,7 @@ if ($logged == 'in') {
 		<div class="container">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-				<h3 style="display:inline"><?php echo $pageinfo['title']; ?></h3> <span class="page-title">&nbspBy <?php echo $pageinfo['owner']; ?> | Last edit: <?php echo date('m/d/Y g:i a', $pageinfo['lastedit']); ?></span><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-info">View</span><?php if ($pageinfo['private'] == 1) {echo "&nbsp<span class=\"label label-warning\" title=\"Only you can view this page\">Private <span class=\"glyphicon glyphicon-question-sign\" aria-hidden=\"true\"></span>";} ?></h4>
+				<h3 style="display:inline"><?php echo $pageinfo['title']; ?></h3> <span class="page-title">&nbspBy <?php echo $pageinfo['owner']; ?> <?php if (checkAdmin($pageinfo['owner'], $db) == true) {echo "<span style='color:#d9534f'>[admin]</span>";} ?> | Last edit: <?php echo date('m/d/Y g:i a', $pageinfo['lastedit']); ?></span><h4 style="display:inline;float:right;margin-left:-100px"><span class="label label-info">View</span><?php if ($pageinfo['private'] == 1) {echo "&nbsp<span class=\"label label-warning\" title=\"Only you can view this page\">Private <span class=\"glyphicon glyphicon-question-sign\" aria-hidden=\"true\"></span>";} ?></h4>
 			</div>
 			<!-- <div style="display:inline;"> -->
 			<div class="panel-body">
@@ -110,26 +112,65 @@ if ($logged == 'in') {
 		</div>
 
 		<?php
-		$fetch = $db->query("SELECT submitter, content, lastedit, pageid FROM comments");
+		$fetch = $db->query("SELECT submitter, content, lastedit, pageid FROM comments LIMIT 100");
 
-		echo "<hr />";
-		echo "<h3>Comments</h3>";
+		echo "<button id='showhide_comments' type='button' class='btn btn-xs btn-success'>Show/hide comments</button>";
+		echo "<button id='submit_comment' type='button' style='float:right' class='btn btn-xs btn-primary'>Write a comment..</button>";
+		echo "<div id='comments' style='display:none'>";
+		echo "<hr style='margin-top:8px'/>";
+		echo "<h3 style='margin-top:-12px'>Comments</h3>";
 
 
 		while($row = $fetch->fetch(PDO::FETCH_ASSOC)) {
 		  if ($row['pageid'] == $id) {
 
-		  echo "<div class='panel panel-default' style='width:40%'>";
-		  echo "<div class='panel-body'>";
-		  echo $parsedown->text($row['content']);
-		  echo "</div>";
-		  echo "<div class='panel-footer'>";
-		 echo "". $row['submitter'] ." | ". date('m/d/Y g:i a', $row['lastedit']) ."";
-		  echo "</div>";
-		  echo "</div>";
+		echo "<div class='panel panel-default' style='width:40%'>";
+		echo "<div class='panel-body'>";
+		echo $parsedown->text($row['content']);
+		echo "</div>";
+		echo "<div class='panel-footer'>";
+		if (checkAdmin($row['submitter'], $db) == true) {echo "". $row['submitter'] ."&nbsp<span style='color:#d9534f'>[admin]</span> | ". date('m/d/Y g:i a', $row['lastedit']) ."";} else {echo "". $row['submitter'] ." | ". date('m/d/Y g:i a', $row['lastedit']) ."";}
+		echo "</div>";
+		echo "</div>";
 	  }
 	  }
+	  echo "</div>";
 	  ?>
+
+	  <div class="modal fade" id="newComment" tabindex="-1" role="dialog" aria-labelledby="newCommentLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="newCommentLabel">New comment</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="content" class="control-label">Content:</label>
+            <textarea class="form-control" id="content" name="content" rows="10"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	  <script>
+	  $('#showhide_comments').click(function() {
+	  	$('#comments').toggle('blind');
+	  });
+	  $('#submit_comment').click(function() {
+	  	$('#newComment').modal();
+	  });
+	  $('#newComment').on('shown.bs.modal', function () {
+		$('#content').focus();
+	  });
+	  </script>
 
 		</div>
 		<footer class="footer">
