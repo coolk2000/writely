@@ -12,10 +12,11 @@ if (isset($_POST['pageid'], $_POST['submitter'], $_POST['content'])) {
 	$lastedit = time();
 
 	if (empty($error_msg)) {
-		if ($stmt = $db->prepare("INSERT INTO pages (submitter, pageid, content, lastedit) VALUES (:submitter, :pageid, :content, :lastedit)")) {
+		if ($stmt = $db->prepare("INSERT INTO comments (submitter, pageid, content, lastedit) VALUES (:submitter, :pageid, :content, :lastedit)")) {
 			if (! $stmt->execute(array(':submitter' => $submitter, ':pageid' => $pageid, ':content' => $content, ':lastedit' => $lastedit))) {
 				header('Location: /error=creation failure: INSERT');
 			}
 		}
+		header('Location: /page/view/'.$pageid.'');
 	}
 }

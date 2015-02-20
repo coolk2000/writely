@@ -23,5 +23,5 @@
   - [x] See All Pages
 - [ ] Social
   - [ ] Private Messaging
-  - [ ] Page Commenting
+  - [x] Page Commenting
   - [ ] Likes/Dislikes

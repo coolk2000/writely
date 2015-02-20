@@ -1,7 +1,7 @@
 <?php
 include_once '../includes/db_connect.php';
 include_once '../includes/db_functions.php';
-include '../includes/id_gen.php';
+include_once '../includes/newcomment.php';
 include '../vendor/autoload.php';
 $parsedown = new ParsedownExtra();
 
@@ -145,17 +145,25 @@ if ($logged == 'in') {
         <h4 class="modal-title" id="newCommentLabel">New comment</h4>
       </div>
       <div class="modal-body">
-        <form>
+        <form class="form-newcomment" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" method="post" name="new_comment">
           <div class="form-group">
             <label for="content" class="control-label">Content:</label>
             <textarea class="form-control" id="content" name="content" rows="10"></textarea>
           </div>
-        </form>
+          <div class="form-group" style="display:none">
+            <label for="submitter" class="control-label">Submitter:</label>
+            <input type="text" class="form-control" id="submitter" name="submitter" value="<?php echo $_SESSION['username']; ?>"></input>
+          </div>
+          <div class="form-group" style="display:none">
+            <label for="pageid" class="control-label">Page ID:</label>
+            <input type="text" class="form-control" id="pageid" name="pageid" value="<?php echo $id; ?>"></input>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="form.submit();">Submit</button>
       </div>
+      </form>
     </div>
   </div>
 </div>
