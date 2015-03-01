@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller {
 
@@ -23,7 +24,16 @@ class UsersController extends Controller {
 			abort(404);
 		}
 
-		return view('user.show', compact('user'));
+		if (Auth::user())
+		{
+			$auth_user = Auth::user();
+		}
+		else
+		{
+			$auth_user = null;
+		}
+
+		return view('user.show', compact('user', 'auth_user'));
 	}
 
 }

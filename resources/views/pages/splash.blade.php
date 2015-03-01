@@ -2,6 +2,7 @@
 
 @section('head')
     <link href="/compiled/css/bootstrap-splash.css" rel="stylesheet">
+    <link href="/compiled/css/animate.css" rel="stylesheet">
 @stop
 
 @section('content')
@@ -13,20 +14,20 @@
 
                 <div class="masthead clearfix">
                     <div class="inner">
-                        <h3 class="masthead-brand">sequl&nbsp;<small>(sequel without the e)</small></h3>
+                        <h3 class="masthead-brand animated fadeInDown" id="headerTextAnimation">sequl&nbsp;<small>(sequel without the e)</small></h3>
                         <nav>
                             <ul class="nav masthead-nav">
-                                <li class="active"><a href="#">Home</a></li>
-                                <li><a href="auth/register">Register</a></li>
-                                <li><a href="auth/login">Login</a></li>
+                                <li class="active animated fadeInDown"><a href="#">Home</a></li>
+                                <li class="animated fadeInDown" id="headerNavAnimation2"><a href="auth/register">Register</a></li>
+                                <li class="animated fadeInDown" id="headerNavAnimation3"><a href="auth/login">Login</a></li>
                             </ul>
                         </nav>
                     </div>
                 </div>
 
-                <div class="inner cover">
-                    <h1 class="cover-heading">Your stories live here.</h1>
-                    <p class="lead">From small snippets to big projects, you can count on us to host it all. Free, forever.</p>
+                <div class="inner cover animated fadeInUp" id="headerTextAnimation">
+                    <h1 class="cover-heading header-text">Your stories live here.</h1>
+                    <p class="lead header-text">From small snippets to big projects, you can count on us to host it all. Free, forever.</p>
                     <p class="lead">
                         <a href="auth/register" class="btn btn-lg btn-default">Start writing</a>
                     </p>
@@ -34,7 +35,7 @@
 
                 <div class="mastfoot">
                     <div class="inner">
-                        <p style="color:#5e8cde;font-weight:bold;"><3</p>
+                        <p style="color:#5e8cde;font-weight:bold;" class="inner cover animated zoomIn" id="headerTextAnimation">- Nigel</p>
                     </div>
                 </div>
 

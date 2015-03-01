@@ -111,6 +111,13 @@ body {
  * Cover
  */
 
+.header-text {
+    background: -webkit-linear-gradient(22deg, #5e8cde, #2d456d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: hue 20s infinite linear;
+}
+
 .cover {
     padding: 0 20px;
 }
@@ -119,6 +126,36 @@ body {
     font-weight: bold;
 }
 
+/*
+ * Animations
+ */
+
+@-webkit-keyframes hue {
+    from {
+        -webkit-filter: hue-rotate(0deg);
+    }
+
+    to {
+        -webkit-filter: hue-rotate(-360deg);
+    }
+}
+
+#headerTextAnimation {
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count: 1;
+}
+
+#headerNavAnimation2 {
+    -webkit-animation-duration: 1s;
+    -webkit-animation-delay: 0.2s;
+    -webkit-animation-iteration-count: 1;
+}
+
+#headerNavAnimation3 {
+    -webkit-animation-duration: 1s;
+    -webkit-animation-delay: 0.3s;
+    -webkit-animation-iteration-count: 1;
+}
 
 /*
  * Footer
@@ -177,3 +214,4 @@ body {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
