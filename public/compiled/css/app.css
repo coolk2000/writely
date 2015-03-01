@@ -1,0 +1,38 @@
+.container {
+  padding-top: 60px; }
+
+.sequl-heading {
+  font-family: 'Karma', sans-serif;
+  font-style: normal;
+  font-weight: 600; }
+
+body, label, .checkbox label {
+  font-weight: 300; }
+
+::-moz-selection {
+  background: #6dc4ff;
+  /* WebKit/Blink Browsers */ }
+
+::selection {
+  background: #6dc4ff;
+  /* WebKit/Blink Browsers */ }
+
+::-moz-selection {
+  background: #6dc4ff;
+  /* Gecko Browsers */ }
+
+.hr-definition {
+  margin-top: -10px;
+  margin-bottom: 0px;
+  border-color: rgba(113, 218, 90, 0.69); }
+
+canvas {
+  display: block;
+  vertical-align: bottom; }
+
+#particles-js {
+  height: 100%;
+  background: #e7e7e7; }
+
+
+/*# sourceMappingURL=app.css.map */
