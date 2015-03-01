@@ -1,5 +1,5 @@
 .container {
-  padding-top: 60px; }
+  padding-top: 70px; }
 
 .sequl-heading {
   font-family: 'Karma', sans-serif;
@@ -24,7 +24,7 @@ body, label, .checkbox label {
 .hr-definition {
   margin-top: -10px;
   margin-bottom: 0px;
-  border-color: rgba(113, 218, 90, 0.69); }
+  border-color: rgba(109, 196, 255, 0.69); }
 
 canvas {
   display: block;

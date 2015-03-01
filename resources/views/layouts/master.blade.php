@@ -11,9 +11,8 @@
 </head>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-
-        </div>
+        <a class="navbar-brand" style="font-family:'Karma',sans-serif;font-weight:600;color:#5e8cde;font-size:200%;padding-top:18px" href="/home">sequl</a>
+        @yield('navbar')
     </nav>
     @yield('content')
     <script src="/compiled/js/min.js"></script>
