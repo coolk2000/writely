@@ -18,9 +18,11 @@ class UsersController extends Controller {
 	{
 		if (Auth::user())
 		{
-			$user = Auth::user();
+			$auth_user = Auth::user();
 
-			return view('user.settings', compact('user'));
+			$title = $auth_user->username.'\'s settings';
+
+			return view('user.settings', compact('auth_user', 'title'));
 		}
 		elseif (Auth::guest())
 		{
@@ -42,6 +44,8 @@ class UsersController extends Controller {
 	{
 		$user = User::where('username', '=', $username)->first();
 
+		$title = $user->username;
+
 		if ($user == null)
 		{
 			abort(404);
@@ -56,16 +60,7 @@ class UsersController extends Controller {
 			$auth_user = null;
 		}
 
-		return view('user.show', compact('user', 'auth_user'));
-	}
-
-	public function editTagline(User $user, TaglineRequest $request)
-	{
-		$user->update($request->except('_method', '_token'));
-
-		$this->syncTags($page, $request->input('tag_list'));
-
-		return redirect('user/'.$user->username);
+		return view('user.show', compact('user', 'auth_user', 'title'));
 	}
 
 }
