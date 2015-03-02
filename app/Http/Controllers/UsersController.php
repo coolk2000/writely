@@ -14,13 +14,19 @@ class UsersController extends Controller {
 		return redirect('/user/home');
 	}
 
-	public function home()
+	public function settings()
 	{
 		if (Auth::user())
 		{
-			return redirect('user/'. Auth::user()->username);
+			$user = Auth::user();
+
+			return view('user.settings', compact('user'));
 		}
 		elseif (Auth::guest())
+		{
+			return redirect('/home');
+		}
+		else
 		{
 			return redirect('/home');
 		}

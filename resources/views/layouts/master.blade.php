@@ -12,9 +12,9 @@
 <body>
     <nav class="navbar navbar-default navbar-fixed-top">
         <a class="navbar-brand" style="font-family:'Karma',sans-serif;font-weight:600;color:#5e8cde;font-size:200%;padding-top:18px" href="/home">sequl</a>
-        @if (isset($auth_user))
-            @if ($auth_user != null)
-                <p class="navbar-text pull-right"><a href="/user/{{ $auth_user->username }}">{{ $auth_user->username }}</a></p>
+        @if (isset($user))
+            @if ($user != null)
+                <p class="navbar-text pull-right"><a href="/user/{{ $user->username }}">{{ $user->username }}</a></p>
             @else
                 <p class="navbar-text pull-right">Not signed in</a></p>
             @endif

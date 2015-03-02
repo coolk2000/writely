@@ -18,6 +18,7 @@ Route::get('/', function()
 
 Route::get('home', 'PagesController@index');
 Route::resource('pages', 'PagesController');
+Route::get('user/settings', 'UsersController@settings');
 Route::get('user/{user}', 'UsersController@show');
 
 Route::controllers([
