@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/compiled/css/app.css" rel="stylesheet">
     <link href="/compiled/css/min.css" rel="stylesheet">
     @if (isset($title))
