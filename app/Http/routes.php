@@ -17,8 +17,8 @@ Route::get('/', function()
 });
 
 Route::get('home', 'PagesController@index');
-
-Route::resource('user', 'UsersController');
+Route::resource('pages', 'PagesController');
+Route::get('user/{user}', 'UsersController@show');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

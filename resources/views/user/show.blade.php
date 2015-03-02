@@ -11,19 +11,16 @@
                     &ldquo;{{ $user->tagline }}&rdquo;
                 @endif
                 </div>
-
-                @if ($auth_user != null & $auth_user->username == $user->username)
-                    &nbsp;&mdash;&nbsp;<a href="#" id="toggleTaglineEdit">edit</a>
-                @endif
             </small>
         </h2>
         <hr class="hr-definition">
     </div>
 
-    <script>
+    {{--<script>
         $('html').click(function() {
             $('#taglineEditBox').hide();
             $('#tagline').show();
+            $('#toggleTaglineEdit').show();
         });
 
         $('#container').click(function(e){
@@ -33,6 +30,7 @@
         $('#toggleTaglineEdit').click(function() {
             $('#tagline').toggle();
             $('#taglineEditBox').toggle();
+            $('#toggleTaglineEdit').toggle();
         });
-    </script>
+    </script>--}}
 @stop

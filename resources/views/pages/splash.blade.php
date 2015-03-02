@@ -2,7 +2,6 @@
 
 @section('head')
     <link href="/compiled/css/bootstrap-splash.css" rel="stylesheet">
-    <link href="/compiled/css/animate.css" rel="stylesheet">
 @stop
 
 @section('content')

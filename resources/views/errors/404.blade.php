@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master-no-nav')
 
 @section('head')
     <link href="/compiled/css/bootstrap-splash.css" rel="stylesheet">

@@ -9,15 +9,32 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller {
 
+	public function index()
+	{
+		return redirect('/user/home');
+	}
+
+	public function home()
+	{
+		if (Auth::user())
+		{
+			return redirect('user/'. Auth::user()->username);
+		}
+		elseif (Auth::guest())
+		{
+			return redirect('/home');
+		}
+	}
+
 	/**
 	 * Display the specified user's page.
 	 *
-	 * @param $name
+	 * @param User $username
 	 * @return Response
 	 */
-	public function show($name)
+	public function show($username)
 	{
-		$user = User::where('username', '=', $name)->first();
+		$user = User::where('username', '=', $username)->first();
 
 		if ($user == null)
 		{
@@ -34,6 +51,15 @@ class UsersController extends Controller {
 		}
 
 		return view('user.show', compact('user', 'auth_user'));
+	}
+
+	public function editTagline(User $user, TaglineRequest $request)
+	{
+		$user->update($request->except('_method', '_token'));
+
+		$this->syncTags($page, $request->input('tag_list'));
+
+		return redirect('user/'.$user->username);
 	}
 
 }
