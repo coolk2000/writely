@@ -11,7 +11,7 @@ class UsersController extends Controller {
 
 	public function index()
 	{
-		return redirect('/user/home');
+		return redirect('/home');
 	}
 
 	public function settings()
@@ -44,12 +44,12 @@ class UsersController extends Controller {
 	{
 		$user = User::where('username', '=', $username)->first();
 
-		$title = $user->username;
-
 		if ($user == null)
 		{
 			abort(404);
 		}
+
+		$title = $user->username;
 
 		if (Auth::user())
 		{

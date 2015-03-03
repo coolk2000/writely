@@ -20,7 +20,13 @@
         <a class="navbar-brand" style="font-family:'Karma',sans-serif;font-weight:600;color:#5e8cde;font-size:200%;padding-top:18px" href="/home">sequl</a>
         @if (isset($auth_user))
             @if ($auth_user != null)
-                <p class="navbar-text pull-right"><a href="/user/{{ $auth_user->username }}">{{ $auth_user->username }}</a> / <a href="/auth/logout" style="color: #e1312c;">logout</a></p>
+                <p class="navbar-text pull-right">
+                    <a href="/user/{{ $auth_user->username }}">{{ $auth_user->username }}</a>
+                    &nbsp;/&nbsp;
+                    <a href="/user/settings">settings</a>
+                    &nbsp;/&nbsp;
+                    <a href="/auth/logout" style="color: #e1312c;">logout</a>
+                </p>
             @else
                 <p class="navbar-text pull-right"><a href="/auth/login">login</a> / <a href="/auth/register">register</a></p>
             @endif
