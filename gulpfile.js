@@ -16,14 +16,11 @@ elixir(function(mix) {
 
     mix.styles([
         'libs/bootstrap.min.css',
-        'libs/select2.min.css',
         'libs/animate.min.css'
     ], 'public/compiled/css/min.css');
 
     mix.scripts([
         'libs/jquery.min.js',
-        'libs/select2.min.js',
-        'libs/bootstrap.min.js',
-        'libs/jquery.autosize.input.min.js'
+        'libs/bootstrap.min.js'
     ], 'public/compiled/js/min.js');
 });

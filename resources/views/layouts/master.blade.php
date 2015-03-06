@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
+    <script language="JavaScript" type="text/javascript" src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/compiled/"></script>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="/favicon.ico" />
     <link href="/compiled/css/app.css" rel="stylesheet">
@@ -36,5 +38,6 @@
         @yield('navbar')
     </nav>
     @yield('content')
+@yield('footer')
 </body>
 </html>

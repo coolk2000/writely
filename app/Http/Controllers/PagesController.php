@@ -93,9 +93,10 @@ class PagesController extends Controller {
 	{
 		$this->createPage($request);
 
-		flash()->overlay('Your page has been created', 'Good Job');
+		$page = Auth::user()->pages()->latest('created_at')->first();
+		$redirect = '/pages/'. $page->id;
 
-		return redirect('pages/all');
+		return redirect($redirect);
 	}
 
 	/**
@@ -174,7 +175,7 @@ class PagesController extends Controller {
 	 */
 	private function createPage(PageRequest $request)
 	{
-		$body = nl2br($request->body);
+		$body = nl2br(preg_replace('/(<script(\s|\S)*?<\/script>)|(<style(\s|\S)*?<\/style>)|(<!--(\s|\S)*?-->)|(<\/?(\s|\S)*?>)/', '', $request->body));
 		$title = $request->title;
 		$published_at = $request->published_at;
 		$tags = $request->tags;

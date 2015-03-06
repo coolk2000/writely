@@ -6,13 +6,13 @@
 
     <article>{!! $page->body !!}</article>
 
-    @unless ($page->tags->isEmpty())
-    <h5>Tags:</h5>
-    <ul>
-        @foreach ($page->tags as $tag)
-            <li>{{ $tag->name }}</li>
-        @endforeach
-    </ul>
-    @endunless
-    </div>
+    {{--@unless ($page->tags->isEmpty())--}}
+    {{--<h5>Tags:</h5>--}}
+    {{--<ul>--}}
+        {{--@foreach ($page->tags as $tag)--}}
+            {{--<li>{{ $tag->name }}</li>--}}
+        {{--@endforeach--}}
+    {{--</ul>--}}
+    {{--@endunless--}}
+    {{--</div>--}}
 @stop

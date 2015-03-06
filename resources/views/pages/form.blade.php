@@ -1,11 +1,16 @@
+@section('head')
+    <script src="/compiled/js/epiceditor.js" type="text/javascript"></script>
+@stop
+
+<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
 <div class="form-group">
     {!! Form::label('title', 'Title') !!}
     {!! Form::text('title', null, ['class' => 'form-control']) !!}
 </div>
 
-<div class="form-group">
-    {!! Form::label('body', 'Body') !!}
-    {!! Form::textarea('body', null, ['class' => 'form-control']) !!}
+<div id="epiceditor" style="border:1px solid #000;border-radius:4px;box-shadow:0px 0px 12px 2px #888">
+    {!! Form::textarea('body', null) !!}
 </div>
 
 <div class="form-group">
@@ -23,6 +28,6 @@
 
 @section('footer')
     <script>
-        $('#tag_list').select2();
+        var editor = new EpicEditor().load();
     </script>
 @stop
